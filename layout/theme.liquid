@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    >
+
+    <title>
+      {{ page_title }}
+      {% unless page_title contains shop.name %}
+        – {{ shop.name }}
+      {% endunless %}
+    </title>
+
+    {% if page_description %}
+      <meta
+        name="description"
+        content="{{ page_description | escape }}"
+      >
+    {% endif %}
+
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {{ content_for_header }}
+
+    <!-- Tailwind compilado: no editar manualmente -->
+    {{ 'application.css' | asset_url | stylesheet_tag }}
+
+    <!-- Personalización visual de Reimii -->
+    {{ 'reimii.css' | asset_url | stylesheet_tag }}
+
+    <script
+      src="{{ 'application.js' | asset_url }}"
+      defer
+    ></script>
+  </head>
+
+  <body class="bg-reimii text-reimii">
+    {% section 'header' %}
+
+    <main id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+  </body>
+</html>

@@ -1,0 +1,447 @@
+@font-face {
+  font-family: "Reimii Display";
+  src: url("{{ 'ReimiiDisplay.ttf' | asset_url }}") format("truetype");
+}
+
+@font-face {
+  font-family: "Reimii Sans";
+  src: url("{{ 'ReimiiSans.ttf' | asset_url }}") format("truetype");
+}
+
+:root {
+  /* Fonts */
+  --r-font-heading:
+    "Reimii Display", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+
+  --r-font-body:
+    "Reimii Sans", Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Backgrounds */
+  --r-bg: #fcfbff;
+  --r-bg-alt: #fff7fc;
+
+  /* Neutrals */
+  --r-white: #fffbff;
+  --r-black: #241f35;
+
+  /* Surfaces */
+  --r-surface: var(--r-white);
+  --r-surface-soft: var(--r-cream);
+  --r-surface-pink: #fff1f8;
+  --r-surface-purple: #f3edff;
+
+  /* Typography */
+  --r-text: #312c43;
+  --r-text-strong: #241f35;
+  --r-muted: #756f88;
+  --r-muted-dark: #5e5870;
+
+  /* Purple */
+  --r-primary: #8e73d8;
+  --r-primary-dark: #7457c7;
+  --r-primary-soft: #ddd5f3;
+
+  /* Pink */
+  --r-pink: #f7a9d4;
+  --r-pink-dark: #d96dae;
+  --r-pink-soft: #fdd7ec;
+
+  /* Supporting colors */
+  --r-cream: #fff9ef;
+  --r-warning: #ffe3a3;
+  --r-success: #dff8f0;
+  --r-info: #e7f0ff;
+  --r-disabled: #eceaf2;
+
+  /* Borders */
+  --r-border: rgba(49, 44, 67, 0.08);
+  --r-border-strong: rgba(49, 44, 67, 0.14);
+
+  /* Shadows */
+  --r-shadow: 0 10px 30px rgba(116, 87, 199, 0.1);
+  --r-shadow-hover: 0 18px 50px rgba(116, 87, 199, 0.18);
+  --r-shadow-strong: 0 24px 90px rgba(49, 44, 67, 0.24);
+
+  /* Gradients */
+  --r-gradient-primary: linear-gradient(
+    135deg,
+    var(--r-pink) 0%,
+    var(--r-primary) 100%
+  );
+
+  --r-gradient-primary-hover: linear-gradient(
+    135deg,
+    var(--r-pink-dark) 0%,
+    var(--r-primary-dark) 100%
+  );
+
+  --r-gradient-soft: linear-gradient(
+    135deg,
+    var(--r-surface-purple),
+    var(--r-surface-pink)
+  );
+
+  --r-gradient-card: var(--r-gradient-soft);
+
+  --r-gradient-story: linear-gradient(
+    135deg,
+    var(--r-primary-soft),
+    var(--r-surface-pink)
+  );
+
+  /* UI */
+  --r-overlay: rgba(49, 44, 67, 0.36);
+  --r-header-bg: rgba(252, 251, 255, 0.86);
+
+  /* Radius */
+  --r-radius: 24px;
+  --r-radius-lg: 34px;
+  --r-pill: 999px;
+
+  /* Tailwind variable overrides */
+  --font-sans: var(--r-font-body);
+  --default-font-family: var(--r-font-body);
+
+  --color-white: var(--r-white);
+  --color-gray-500: var(--r-muted);
+  --color-gray-900: var(--r-text-strong);
+}
+
+/* =========================================================
+   GLOBAL BRAND STYLES
+========================================================= */
+
+html {
+  font-family: var(--r-font-body);
+  color: var(--r-text);
+  background-color: var(--r-bg);
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--r-font-body);
+  color: var(--r-text);
+  background-color: var(--r-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--r-font-heading);
+  color: var(--r-text-strong);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  transition:
+    color 180ms ease,
+    opacity 180ms ease;
+}
+
+a:hover {
+  color: var(--r-primary-dark);
+  opacity: 0.9;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+::selection {
+  color: var(--r-text-strong);
+  background: var(--r-pink-soft);
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--r-primary) 40%, transparent);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   REIMII TYPOGRAPHY UTILITIES
+========================================================= */
+
+.font-reimii {
+  font-family: var(--r-font-body);
+}
+
+.font-reimii-display {
+  font-family: var(--r-font-heading);
+}
+
+/* =========================================================
+   TEXT COLORS
+========================================================= */
+
+.text-reimii-black {
+  color: var(--r-black);
+}
+
+.text-reimii-white {
+  color: var(--r-white);
+}
+
+.text-reimii {
+  color: var(--r-text);
+}
+
+.text-reimii-strong {
+  color: var(--r-text-strong);
+}
+
+.text-reimii-muted {
+  color: var(--r-muted);
+}
+
+.text-reimii-muted-dark {
+  color: var(--r-muted-dark);
+}
+
+.text-reimii-primary-soft {
+  color: var(--r-primary-soft);
+}
+
+.text-reimii-primary {
+  color: var(--r-primary);
+}
+
+.text-reimii-primary-dark {
+  color: var(--r-primary-dark);
+}
+
+.text-reimii-pink-soft {
+  color: var(--r-pink-soft);
+}
+
+.text-reimii-pink {
+  color: var(--r-pink);
+}
+
+.text-reimii-pink-dark {
+  color: var(--r-pink-dark);
+}
+
+.text-reimii-warning {
+  color: #c98d00;
+}
+
+.text-reimii-success {
+  color: #2b8d6e;
+}
+
+.text-reimii-info {
+  color: #3d72d6;
+}
+
+.hover\:text-reimii-primary:hover {
+  color: var(--r-primary);
+}
+
+.hover\:text-reimii-primary-dark:hover {
+  color: var(--r-primary-dark);
+}
+
+.hover\:text-reimii-pink:hover {
+  color: var(--r-pink);
+}
+
+.hover\:text-reimii-pink-dark:hover {
+  color: var(--r-pink-dark);
+}
+
+.hover\:text-reimii-pink-soft:hover {
+  color: var(--r-pink-soft);
+}
+
+/* =========================================================
+   BACKGROUND COLORS
+========================================================= */
+
+.bg-reimii {
+  background-color: var(--r-bg);
+}
+
+.bg-reimii-alt {
+  background-color: var(--r-bg-alt);
+}
+
+.bg-reimii-white {
+  background-color: var(--r-white);
+}
+
+.bg-reimii-black {
+  background-color: var(--r-black);
+}
+
+.bg-reimii-surface {
+  background-color: var(--r-surface);
+}
+
+.bg-reimii-surface-soft {
+  background-color: var(--r-surface-soft);
+}
+
+.bg-reimii-pink {
+  background-color: var(--r-surface-pink);
+}
+
+.bg-reimii-purple {
+  background-color: var(--r-surface-purple);
+}
+
+.bg-reimii-primary {
+  background-color: var(--r-primary);
+}
+
+.bg-reimii-primary-dark {
+  background-color: var(--r-primary-dark);
+}
+
+.bg-reimii-primary-soft {
+  background-color: var(--r-primary-soft);
+}
+
+.bg-reimii-pink-solid {
+  background-color: var(--r-pink);
+}
+
+.bg-reimii-pink-dark {
+  background-color: var(--r-pink-dark);
+}
+
+.bg-reimii-pink-soft {
+  background-color: var(--r-pink-soft);
+}
+
+.bg-reimii-cream {
+  background-color: var(--r-cream);
+}
+
+.bg-reimii-warning {
+  background-color: var(--r-warning);
+}
+
+.bg-reimii-success {
+  background-color: var(--r-success);
+}
+
+.bg-reimii-info {
+  background-color: var(--r-info);
+}
+
+.bg-reimii-disabled {
+  background-color: var(--r-disabled);
+}
+
+/* =========================================================
+   REIMII COMPONENT HELPERS
+========================================================= */
+
+.reimii-card {
+  color: var(--r-text);
+  background: var(--r-gradient-card);
+  border: 1px solid var(--r-border);
+  border-radius: var(--r-radius);
+  box-shadow: var(--r-shadow);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.reimii-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--r-border-strong);
+  box-shadow: var(--r-shadow-hover);
+}
+
+.reimii-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.75rem 1.4rem;
+  font-family: var(--r-font-body);
+  font-weight: 700;
+  color: var(--r-white);
+  background: var(--r-gradient-primary);
+  border: 0;
+  border-radius: var(--r-pill);
+  box-shadow: 0 8px 22px rgba(116, 87, 199, 0.18);
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.reimii-button:hover {
+  color: var(--r-white);
+  background: var(--r-gradient-primary-hover);
+  box-shadow: var(--r-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.reimii-button:active {
+  transform: translateY(0);
+}
+
+.reimii-button-secondary {
+  color: var(--r-primary-dark);
+  background: var(--r-surface);
+  border: 1px solid var(--r-primary-soft);
+  box-shadow: none;
+}
+
+.reimii-button-secondary:hover {
+  color: var(--r-primary-dark);
+  background: var(--r-surface-purple);
+  border-color: var(--r-primary);
+  box-shadow: var(--r-shadow);
+}
+
+.reimii-input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.75rem 1rem;
+  color: var(--r-text);
+  background-color: var(--r-surface);
+  border: 1px solid var(--r-border-strong);
+  border-radius: 16px;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.reimii-input::placeholder {
+  color: var(--r-muted);
+}
+
+.reimii-input:focus {
+  border-color: var(--r-primary);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(142, 115, 216, 0.14);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.logo{
+  height: 30px;
+  width: auto;
+}

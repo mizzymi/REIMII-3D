@@ -1,0 +1,50 @@
+<div class="relative bg-reimii-black">
+  <div class="mx-auto px-4 sm:px-6">
+    <div class="flex justify-center items-center py-6 md:justify-start md:space-x-10">
+      <!-- STORE NAME / STORE LOGO -->
+      <div class="flex justify-start lg:flex-1 truncate">
+        <a href="{{ routes.root_url }}">
+          <img
+            src="{{ 'LogoType.svg' | asset_url }}"
+            alt="{{ shop.name }}"
+            class="logo sm:h-10"
+            width="180"
+            height="48"
+          >
+        </a>
+      </div>
+
+      <!-- NAVIGATION MENU -->
+      <nav class="hidden md:flex space-x-10">
+        {% for link in linklists['main-menu'].links %}
+          {% if link.links['main-menu'].links %}
+            <div class="relative">
+              <button
+                type="button"
+                class="text-reimii-white hover:text-reimii-pink"
+                aria-expanded="false"
+              >
+                {{ link.title }}
+              </button>
+            </div>
+
+          {% else %}
+            <div class="relative">
+              <a href="{{ link.url }}" class="text-reimii-white hover:text-reimii-pink">
+                {{ link.title }}
+              </a>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </nav>
+
+      <div class="hidden md:flex items-center justify-end md:flex-1 space-x-5">
+        <a href="{{ routes.cart_url }}" class="whitespace-nowrap text-reimii-white hover:text-reimii-pink">
+          {% render 'icons-shopping-cart' %}
+        </a>
+        <a href="{{ routes.account_login_url }}" class="text-reimii-white hover:text-reimii-pink">Login</a>
+        <a href="{{ routes.account_register_url }}" class="text-reimii-white hover:text-reimii-pink">Register</a>
+      </div>
+    </div>
+  </div>
+</div>
