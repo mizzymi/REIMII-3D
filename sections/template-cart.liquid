@@ -1,0 +1,124 @@
+<div class="cart-container">
+  <h2 class="article-comments-title">Carrito</h2>
+  {% if cart.item_count > 0 %}
+    <div class="cart-container">
+      <form action="/cart" method="post" novalidate class="cart-form">
+        <div class="cart-table-wrapper">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th colspan="2">Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for item in cart.items %}
+                <tr>
+                  <td class="cart-product-image-cell">
+                    <a
+                      href="{{ item.url | within: collections.all }}"
+                      class="cart-product-image-link"
+                    >
+                      <img
+                        src="{{ item.image | image_url: width: 300 }}"
+                        alt="{{ item.title | escape }}"
+                        class="cart-product-image"
+                        width="{{ item.image.width }}"
+                        height="{{ item.image.height }}"
+                        loading="lazy"
+                      >
+                    </a>
+                  </td>
+
+                  <td class="cart-product-info">
+                    <a href="{{ item.url }}" class="cart-product-title">
+                      {{ item.product.title }}
+                    </a>
+
+                    {% unless item.variant.title == 'Default Title' %}
+                      <span class="cart-product-variant">
+                        {{ item.variant.title }}
+                      </span>
+                    {% endunless %}
+
+                    <a
+                      href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
+                      class="cart-product-remove"
+                    >
+                      Eliminar
+                    </a>
+                  </td>
+
+                  <td class="cart-price">
+                    {{ item.final_price | money }}
+                  </td>
+
+                  <td class="cart-quantity">
+                    <input
+                      type="number"
+                      name="updates[]"
+                      id="updates_{{ item.key }}"
+                      value="{{ item.quantity }}"
+                      min="0"
+                      class="cart-quantity-input"
+                      aria-label="Cantidad de {{ item.product.title | escape }}"
+                    >
+                  </td>
+
+                  <td class="cart-line-total">
+                    {% if item.original_line_price != item.final_line_price %}
+                      <span class="cart-original-price">
+                        {{ item.original_line_price | money }}
+                      </span>
+                    {% endif %}
+
+                    {{ item.final_line_price | money }}
+
+                    {% for discount in item.line_level_discount_allocations %}
+                      <span class="cart-discount">
+                        {{ discount.discount_application.title }}
+                      </span>
+                    {% endfor %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cart-summary">
+          <p class="cart-subtotal">
+            Subtotal
+            <strong>{{ cart.total_price | money }}</strong>
+          </p>
+
+          <div class="cart-actions">
+            <button
+              type="submit"
+              name="update"
+              class="cart-update-button"
+            >
+              Actualizar
+            </button>
+
+            <button
+              type="submit"
+              name="checkout"
+              class="cart-checkout-button"
+            >
+              Proceder al pago
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  {% else %}
+    <div class="w-full flex flex-col items-center justify-center">
+      <p>El carrito está vacío.</p>
+      <a class="reimii-button" href="{{ routes.all_products_collection_url }}"> Seguir comprando </a>
+    </div>
+  {% endif %}
+</div>

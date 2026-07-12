@@ -1,0 +1,39 @@
+{
+    "sections": {
+        "template": {
+            "type": "template-article",
+            "blocks": {
+                "title": {
+                    "type": "article_title",
+                    "name": "Título del artículo"
+                },
+                "author": {
+                    "type": "article_author",
+                    "name": "Autor del artículo"
+                },
+                "date": {
+                    "type": "article_date",
+                    "name": "Fecha del artículo"
+                },
+                "featured_image": {
+                    "type": "featured_image",
+                    "name": "Imagen principal"
+                },
+                "content": {
+                    "type": "article_content",
+                    "name": "Contenido del artículo"
+                }
+            },
+            "block_order": [
+                "title",
+                "author",
+                "date",
+                "featured_image",
+                "content"
+            ]
+        }
+    },
+    "order": [
+        "template"
+    ]
+}

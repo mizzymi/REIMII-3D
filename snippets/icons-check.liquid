@@ -1,0 +1,38 @@
+{% assign icon_id = icon_id | default: section.id %}
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  width="64"
+  height="64"
+  role="img"
+  aria-label="Check"
+  class="icon"
+>
+  <defs>
+    <linearGradient
+      id="reimii-gradient-{{ icon_id }}"
+      x1="10"
+      y1="32"
+      x2="54"
+      y2="32"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop offset="0%" stop-color="#241f35" />
+      <stop offset="100%" stop-color="#241f35" />
+    </linearGradient>
+  </defs>
+
+  <path
+    fill="none"
+    stroke="url(#reimii-gradient-{{ icon_id }})"
+    stroke-width="3.05"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    d="
+      M14 34
+      C18 38, 22 42, 26 46
+      C35 34, 42 23, 50 12
+    "
+  />
+</svg>

@@ -1,0 +1,64 @@
+{% paginate blog.articles by section.settings.number_of_articles %}
+  <div class="template-article">
+    <h2 class="article-title">{{ blog.title }}</h2>
+    {% for article in blog.articles %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="{{ article.url }}">
+          <div class="article-item">
+            {% if article.image %}
+              <img
+                src="{{ article.image | img_url: 'medium' }}"
+                alt="{{ article.image.alt | escape }}"
+                class="blog-image"
+                loading="lazy"
+                width="{{ article.image.width }}"
+                height="{{ article.image.height }}"
+              >
+            {% else %}
+              <div class="placeholder-image w-full p-4 rounded-lg flex items-center justify-center">
+                {% render 'icons-info' %}
+              </div>
+            {% endif %}
+
+            <div>
+              <h3>
+                {{ article.title }}
+              </h3>
+              <small class="article-author">
+                {{- article.author | downcase | capitalize }} @ {{ article.created_at | date: '%Y-%m-%d' -}}
+              </small>
+              <div>
+                {% if article.excerpt.size > 0 %}
+                  {{ article.excerpt }}
+                {% else %}
+                  <p>{{ article.content | strip_html | truncatewords: 20 }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      {% render 'pagination', paginate: paginate %}
+    </div>
+  </div>
+{% endpaginate %}
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": [
+    {
+      "type": "range",
+      "id": "number_of_articles",
+      "label": "Números de artículos para mostrar",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    }
+  ]
+}
+{% endschema %}

@@ -19,39 +19,100 @@
           {% endif %}
         </a>
       </div>
-
-      <!-- MOBILE MENU BUTTON -->
-      <div class="-mr-2 -my-2 ml-3 md:hidden">
-        <button
-          type="button"
-          class="p-2 inline-flex items-center justify-center focus:outline-none"
-          x-on:click="mobileMenuOpen = !mobileMenuOpen"
-          aria-label="Abrir menú"
-          :aria-expanded="mobileMenuOpen"
+      <div class="flex items-center justify-end md:flex-1 lg:w-0">
+        <a
+          href="{{ routes.cart_url }}"
+          class="whitespace-nowrap text-reimii-white hover:text-reimii-pink"
+          aria-label="Carrito"
         >
-          {% if section.settings.hamburger_icon != blank %}
+          {% if section.settings.cart_icon != blank %}
             {{
-              section.settings.hamburger_icon
-              | image_url: width: section.settings.hamburger_width
-              | image_tag: alt: 'Abrir menú', width: section.settings.hamburger_width, class: 'h-auto'
+              section.settings.cart_icon
+              | image_url: width: section.settings.cart_icon_width
+              | image_tag: alt: 'Carrito', width: section.settings.cart_icon_width, class: 'h-auto'
             }}
           {% else %}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              class="icon"
-              aria-hidden="true"
-            >
-              <path d="M4 7h16" />
-              <path d="M4 12h16" />
-              <path d="M4 17h16" />
-            </svg>
+            {% render 'icons-shopping-cart' %}
           {% endif %}
-        </button>
+        </a>
+
+        <!-- MOBILE MENU BUTTON -->
+        <div class="-mr-2 -my-2 ml-3 md:hidden">
+          <button
+            type="button"
+            class="p-2 inline-flex items-center justify-center focus:outline-none"
+            x-on:click="mobileMenuOpen = !mobileMenuOpen"
+            aria-label="Abrir menú"
+            :aria-expanded="mobileMenuOpen"
+          >
+            {% if section.settings.hamburger_icon != blank %}
+              {{
+                section.settings.hamburger_icon
+                | image_url: width: section.settings.hamburger_width
+                | image_tag: alt: 'Abrir menu', width: section.settings.hamburger_width, class: 'h-auto'
+              }}
+            {% else %}
+              {% assign hamburger_icon_id = section.id | append: '-hamburger' %}
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 64 64"
+                width="{{ section.settings.hamburger_width | default: 36 }}"
+                height="{{ section.settings.hamburger_width | default: 36 }}"
+                role="img"
+                aria-label="Abrir menu"
+                class="icon"
+              >
+                <defs>
+                  <linearGradient
+                    id="reimii-hamburger-gradient-{{ hamburger_icon_id }}"
+                    x1="10"
+                    y1="32"
+                    x2="54"
+                    y2="32"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop offset="0%" stop-color="#8e73d8" />
+                    <stop offset="100%" stop-color="#f7a9d4" />
+                  </linearGradient>
+                </defs>
+
+                <path
+                  d="M12 18.5
+                     C21 18.1 29 18.8 37 18.4
+                     C43 18.1 49 18.4 52 18.2"
+                  fill="none"
+                  stroke="url(#reimii-hamburger-gradient-{{ hamburger_icon_id }})"
+                  stroke-width="3.05"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+
+                <path
+                  d="M12 32
+                     C21 31.6 29 32.4 37 32
+                     C43 31.7 49 32.2 52 31.9"
+                  fill="none"
+                  stroke="url(#reimii-hamburger-gradient-{{ hamburger_icon_id }})"
+                  stroke-width="3.05"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+
+                <path
+                  d="M12 45.5
+                     C21 45.1 29 45.8 37 45.4
+                     C43 45.1 49 45.5 52 45.2"
+                  fill="none"
+                  stroke="url(#reimii-hamburger-gradient-{{ hamburger_icon_id }})"
+                  stroke-width="3.05"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            {% endif %}
+          </button>
+        </div>
       </div>
 
       <!-- MOBILE MENU -->
@@ -184,14 +245,14 @@
                   class="transition-transform duration-200"
                   :class="{ 'rotate-180': open }"
                 >
-                  {% if section.settings.dropdown_icon != blank %}
+                  {% if section.settings.dropdown_icon_on_dark != blank %}
                     {{
                       section.settings.dropdown_icon
                       | image_url: width: section.settings.dropdown_icon_width
                       | image_tag: alt: '', width: section.settings.dropdown_icon_width, class: 'h-auto'
                     }}
                   {% else %}
-                    {% render 'icons-dropdown' %}
+                    {% render 'icons-dropdown-on-dark' %}
                   {% endif %}
                 </span>
               </button>
@@ -358,6 +419,11 @@
       "type": "image_picker",
       "id": "dropdown_icon",
       "label": "Icono desplegable"
+    },
+    {
+      "type": "image_picker",
+      "id": "dropdown_icon_on_dark",
+      "label": "Icono desplegable en zona oscura"
     },
     {
       "type": "range",

@@ -1,0 +1,80 @@
+{% if paginate.pages > 1 %}
+  <nav
+    class="pagination flex items-center justify-center gap-2 p-2 text-sm font-medium text-reimii"
+    role="navigation"
+    aria-label="Paginacion"
+  >
+    {% if paginate.previous %}
+      <a
+        href="{{ paginate.previous.url }}"
+        class="pagination-arrow inline-flex items-center justify-center"
+        aria-label="Pagina anterior"
+      >
+        <span class="sr-only">Anterior</span>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#241f35"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="icon"
+          aria-hidden="true"
+        >
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </a>
+    {% endif %}
+
+    {% for part in paginate.parts %}
+      {% if part.is_link %}
+        <a
+          href="{{ part.url }}"
+          class="pagination-link inline-flex items-center justify-center"
+          aria-label="Pagina {{ part.title }}"
+        >
+          {{ part.title }}
+        </a>
+      {% else %}
+        {% if part.title == paginate.current_page %}
+          <span
+            class="pagination-link is-current inline-flex items-center justify-center"
+            aria-current="page"
+          >
+            {{ part.title }}
+          </span>
+        {% else %}
+          <span class="pagination-ellipsis inline-flex items-center justify-center">
+            {{ part.title }}
+          </span>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% if paginate.next %}
+      <a
+        href="{{ paginate.next.url }}"
+        class="pagination-arrow inline-flex items-center justify-center"
+        aria-label="Pagina siguiente"
+      >
+        <span class="sr-only">Siguiente</span>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#241f35"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="icon"
+          aria-hidden="true"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </a>
+    {% endif %}
+  </nav>
+{% endif %}

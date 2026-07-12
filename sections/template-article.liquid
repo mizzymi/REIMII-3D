@@ -1,0 +1,276 @@
+<article class="template-article" itemscope itemtype="http://schema.org/BlogPosting">
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'article_title' %}
+        <h2 class="article-title text-reimii" itemprop="headline">
+          {{
+            article.title
+            | replace: 'á', 'a'
+            | replace: 'é', 'e'
+            | replace: 'í', 'i'
+            | replace: 'ó', 'o'
+            | replace: 'ú', 'u'
+            | replace: 'Á', 'A'
+            | replace: 'É', 'E'
+            | replace: 'Í', 'I'
+            | replace: 'Ó', 'O'
+            | replace: 'Ú', 'U'
+            | replace: 'ñ', 'n'
+            | replace: 'Ñ', 'N'
+          }}
+        </h2>
+      {% when 'article_author' %}
+        {% if section.settings.show_author %}
+          <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+            <small class="article-author text-reimii">
+              <a href="{{ routes.root_url }}" itemprop="url">
+                <span itemprop="name"> {{ article.author | downcase | capitalize }} </span>
+              </a>
+              {% if section.settings.show_date %}
+                <span class="article-separator" aria-hidden="true"> | </span>
+              {% endif %}
+            </small>
+          </span>
+        {% endif %}
+      {% when 'article_date' %}
+        {% if section.settings.show_date and section.settings.show_author %}
+          <small class="article-date text-reimii" itemprop="datePublished dateCreated">
+            {{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' }} |
+          </small>
+        {% elsif section.settings.show_date %}
+          <small class="article-date text-reimii" itemprop="datePublished dateCreated">
+            {{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' }}
+          </small>
+        {% endif %}
+      {% when 'featured_image' %}
+        {% if article.image != blank %}
+          <div
+            itemprop="image"
+            itemscope
+            itemtype="https://schema.org/ImageObject"
+          >
+            <img
+              src="{{ article.image | image_url: width: 1600 }}"
+              alt="{{ article.image.alt | default: article.title | escape }}"
+              class="article-image"
+              loading="lazy"
+              width="{{ article.image.width }}"
+              height="{{ article.image.height }}"
+            >
+
+            <meta
+              itemprop="url contentUrl"
+              content="{{ article.image | image_url: width: 1600 | prepend: 'https:' }}"
+            >
+
+            <meta
+              itemprop="width"
+              content="{{ article.image.width }}"
+            >
+
+            <meta
+              itemprop="height"
+              content="{{ article.image.height }}"
+            >
+          </div>
+
+        {% else %}
+          <div class="placeholder-image w-full p-4 rounded-lg flex items-center justify-center">
+            {% render 'icons-info' %}
+          </div>
+        {% endif %}
+      {% when 'article_content' %}
+        <div class="article-content text-reimii" itemprop="articleBody">
+          {{ article.content }}
+        </div>
+    {% endcase %}
+  {% endfor %}
+</article>
+
+{% if blog.comments_enabled? %}
+  <div class="article-comments">
+    <h3 class="article-comments-title">Comentarios</h3>
+    {% if article.comments_count > 0 %}
+      <h4 class="article-comments-subtitle">Ve que dice la gente</h4>
+      {% paginate article.comments by 5 %}
+        <div class="article-comments-list">
+          {% for comment in article.comments %}
+            <article class="article-comment">
+              <div class="article-comment-header">
+                <span class="article-comment-author">
+                  {{ comment.author }}
+                </span>
+
+                <span class="article-comment-date">
+                  {{ comment.created_at | date: '%Y-%m-%dT%H:%M:%S%z' }}
+                </span>
+              </div>
+
+              <div class="article-comment-content">
+                {{ comment.content }}
+              </div>
+            </article>
+          {% endfor %}
+          <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            {% render 'pagination', paginate: paginate %}
+          </div>
+        </div>
+      {% endpaginate %}
+    {% else %}
+      <p class="article-comments-empty">Todavia no hay comentarios.</p>
+    {% endif %}
+
+    <div id="comment-form" class="article-comment-form">
+      {% form 'new_comment', article %}
+        {% if form.errors %}
+          <div class="article-comment-errors">
+            {% render 'icons-info' %}
+            <p>Oh no, algo salió mal.</p>
+          </div>
+          <ul class="article-comment-errors-list">
+            {% for error in form.errors %}
+              <li>
+                <span>{{ form.errors.messages[error] }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% elsif form.posted_successfully? %}
+          <div class="article-comment-success">
+            {% render 'icons-check' %}
+            <p>¡Gracias por tu comentario! Se publicará después de ser revisado.</p>
+          </div>
+        {% endif %}
+        <div class="article-comment-form-fields">
+          <div class="flex gap-2">
+            <div>
+              <label for="comment_author" class="article-comment-form-label">Nombre</label>
+              <input
+                type="text"
+                name="comment[author]"
+                id="comment_author"
+                class="article-comment-form-input"
+                required
+              >
+            </div>
+            <div>
+              <label for="comment_email" class="article-comment-form-label">Correo electrónico</label>
+              <input
+                type="email"
+                name="comment[email]"
+                id="comment_email"
+                class="article-comment-form-input"
+                required
+              >
+            </div>
+          </div>
+          <label for="comment_content" class="article-comment-form-label">Comentario</label>
+          <textarea
+            name="comment[body]"
+            id="comment_content"
+            class="article-comment-form-textarea"
+            rows="4"
+            required
+          ></textarea>
+
+          <input type="submit" value="Enviar comentario" class="reimii-button">
+        </div>
+      {% endform %}
+    </div>
+  </div>
+{% endif %}
+
+{% capture article_description %}
+  {% if article.excerpt != blank %}
+    {{ article.excerpt | strip_html | strip }}
+  {% else %}
+    {{ article.content | strip_html | truncate: 160 | strip }}
+  {% endif %}
+{% endcapture %}
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": {{ canonical_url | json }}
+    },
+    "url": {{ canonical_url | json }},
+    "headline": {{ article.title | strip_html | json }},
+    "description": {{ article_description | strip | json }},
+    "author": {
+      "@type": "Person",
+      "name": {{ article.author | json }},
+      "url": {{ shop.url | append: routes.root_url | json }}
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }}
+      {% if settings.logo != blank %},
+        "logo": {
+          "@type": "ImageObject",
+          "url": {{ settings.logo | image_url: width: 600 | prepend: "https:" | json }}
+        }
+      {% endif %}
+    },
+    "datePublished": {{ article.published_at | date: "%Y-%m-%dT%H:%M:%S%z" | json }},
+    "dateCreated": {{ article.created_at | date: "%Y-%m-%dT%H:%M:%S%z" | json }},
+    "dateModified": {{ article.updated_at | date: "%Y-%m-%dT%H:%M:%S%z" | json }}
+    {% if article.image != blank %},
+      "image": {
+        "@type": "ImageObject",
+        "url": {{ article.image | image_url: width: 1600 | prepend: "https:" | json }},
+        "width": {{ article.image.width | json }},
+        "height": {{ article.image.height | json }}
+      }
+    {% endif %},
+    "articleBody": {{ article.content | strip_html | strip | json }}
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Template article",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Mostrar autor",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Mostrar fecha",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article_title",
+      "name": "Título del artículo",
+      "limit": 1
+    },
+    {
+      "type": "article_author",
+      "name": "Autor del artículo",
+      "limit": 1
+    },
+    {
+      "type": "article_date",
+      "name": "Fecha del artículo",
+      "limit": 1
+    },
+    {
+      "type": "featured_image",
+      "name": "Imagen principal",
+      "limit": 1
+    },
+    {
+      "type": "article_content",
+      "name": "Contenido del artículo",
+      "limit": 1
+    }
+  ]
+}
+{% endschema %}

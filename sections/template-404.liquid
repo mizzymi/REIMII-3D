@@ -1,0 +1,55 @@
+<section class="template-404">
+  <div class="mx-auto px-4 py-20 text-center">
+    <h2 class="text-4xl font-bold text-reimii">{{ section.settings.title }}</h2>
+
+    <p class="mt-4 text-reimii">{{ section.settings.subtext }}</p>
+    {% if section.settings.button_url == blank %}
+      {% assign button_url = routes.root_url %}
+    {% else %}
+      {% assign button_url = section.settings.button_url %}
+    {% endif %}
+    <a
+      href="{{ button_url }}"
+      class="reimii-button"
+    >
+      {{ section.settings.button_text }}
+    </a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Template 404",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Pagina no encontrada"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtexto",
+      "default": "Lo sentimos, la página que estás buscando no existe."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto del botón",
+      "default": "Volver al inicio"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "URL del botón"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Template 404"
+    }
+  ]
+}
+{% endschema %}
