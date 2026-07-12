@@ -113,7 +113,7 @@
 ========================================================= */
 
 html {
-  font-family: var(--r-font-body);
+  font-family: var(--r-font-body) !important;
   color: var(--r-text);
   background-color: var(--r-bg);
 }
@@ -133,7 +133,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--r-font-heading);
+  font-family: var(--r-font-heading) !important;
   color: var(--r-text-strong);
   font-weight: 700;
   line-height: 1.15;
@@ -143,7 +143,7 @@ h6 {
 a {
   color: inherit;
   transition:
-    color 180ms ease,
+    all 180ms ease,
     opacity 180ms ease;
 }
 
@@ -345,6 +345,82 @@ textarea {
   background-color: var(--r-disabled);
 }
 
+.hover\:bg-reimii:hover {
+  background-color: var(--r-bg);
+}
+
+.hover\:bg-reimii-alt:hover {
+  background-color: var(--r-bg-alt);
+}
+
+.hover\:bg-reimii-white:hover {
+  background-color: var(--r-white);
+}
+
+.hover\:bg-reimii-black:hover {
+  background-color: var(--r-black);
+}
+
+.hover\:bg-reimii-surface:hover {
+  background-color: var(--r-surface);
+}
+
+.hover\:bg-reimii-surface-soft:hover {
+  background-color: var(--r-surface-soft);
+}
+
+.hover\:bg-reimii-pink:hover {
+  background-color: var(--r-surface-pink);
+}
+
+.hover\:bg-reimii-purple:hover {
+  background-color: var(--r-surface-purple);
+}
+
+.hover\:bg-reimii-primary:hover {
+  background-color: var(--r-primary);
+}
+
+.hover\:bg-reimii-primary-dark:hover {
+  background-color: var(--r-primary-dark);
+}
+
+.hover\:bg-reimii-primary-soft:hover {
+  background-color: var(--r-primary-soft);
+}
+
+.hover\:bg-reimii-pink-solid:hover {
+  background-color: var(--r-pink);
+}
+
+.hover\:bg-reimii-pink-dark:hover {
+  background-color: var(--r-pink-dark);
+}
+
+.hover\:bg-reimii-pink-soft:hover {
+  background-color: var(--r-pink-soft);
+}
+
+.hover\:bg-reimii-cream:hover {
+  background-color: var(--r-cream);
+}
+
+.hover\:bg-reimii-warning:hover {
+  background-color: var(--r-warning);
+}
+
+.hover\:bg-reimii-success:hover {
+  background-color: var(--r-success);
+}
+
+.hover\:bg-reimii-info:hover {
+  background-color: var(--r-info);
+}
+
+.hover\:bg-reimii-disabled:hover {
+  background-color: var(--r-disabled);
+}
+
 /* =========================================================
    REIMII COMPONENT HELPERS
 ========================================================= */
@@ -441,7 +517,7 @@ textarea {
   height: 24px;
 }
 
-.logo{
-  height: 30px;
+.logo {
+  height: 24px;
   width: auto;
 }

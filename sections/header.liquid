@@ -1,36 +1,233 @@
-<div class="relative bg-reimii-black">
+{% assign main_manu_linklist = linklists[section.settings.main_menu] %}
+
+<div class="relative bg-reimii-black" x-data="{ mobileMenuOpen: false }">
   <div class="mx-auto px-4 sm:px-6">
-    <div class="flex justify-center items-center py-6 md:justify-start md:space-x-10">
-      <!-- STORE NAME / STORE LOGO -->
+    <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
+      <!-- STORE LOGO -->
       <div class="flex justify-start lg:flex-1 truncate">
-        <a href="{{ routes.root_url }}">
-          <img
-            src="{{ 'LogoType.svg' | asset_url }}"
-            alt="{{ shop.name }}"
-            class="logo sm:h-10"
-            width="180"
-            height="48"
-          >
+        <a href="{{ routes.root_url }}" class="inline-flex items-center">
+          {% if section.settings.logo != blank %}
+            {{
+              section.settings.logo
+              | image_url: width: section.settings.logo_width
+              | image_tag: alt: shop.name, width: section.settings.logo_width, class: 'logo h-auto'
+            }}
+          {% else %}
+            <span class="text-reimii-white text-xl font-reimii-display">
+              {{ shop.name }}
+            </span>
+          {% endif %}
         </a>
       </div>
 
-      <!-- NAVIGATION MENU -->
+      <!-- MOBILE MENU BUTTON -->
+      <div class="-mr-2 -my-2 ml-3 md:hidden">
+        <button
+          type="button"
+          class="p-2 inline-flex items-center justify-center focus:outline-none"
+          x-on:click="mobileMenuOpen = !mobileMenuOpen"
+          aria-label="Abrir menú"
+          :aria-expanded="mobileMenuOpen"
+        >
+          {% if section.settings.hamburger_icon != blank %}
+            {{
+              section.settings.hamburger_icon
+              | image_url: width: section.settings.hamburger_width
+              | image_tag: alt: 'Abrir menú', width: section.settings.hamburger_width, class: 'h-auto'
+            }}
+          {% else %}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              class="icon"
+              aria-hidden="true"
+            >
+              <path d="M4 7h16" />
+              <path d="M4 12h16" />
+              <path d="M4 17h16" />
+            </svg>
+          {% endif %}
+        </button>
+      </div>
+
+      <!-- MOBILE MENU -->
+      <div
+        class="absolute z-50 top-0 inset-x-0 p-2 transform origin-top-left md:hidden"
+        x-show="mobileMenuOpen"
+        x-cloak
+        @click.away="mobileMenuOpen = false"
+        @keydown.escape.window="mobileMenuOpen = false"
+      >
+        <div class="shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 bg-reimii-white w-full">
+          <div class="p-5 divide-y-2 divide-gray-50">
+            <!-- MOBILE MENU HEADER -->
+            <div class="flex items-center justify-between pb-3">
+              <div>
+                {% if section.settings.mobile_logo != blank %}
+                  {{
+                    section.settings.mobile_logo
+                    | image_url: width: section.settings.mobile_logo_width
+                    | image_tag: alt: shop.name, width: section.settings.mobile_logo_width, class: 'h-auto'
+                  }}
+                {% else %}
+                  <h1 class="text-lg text-reimii">
+                    {{ shop.name }}
+                  </h1>
+                {% endif %}
+              </div>
+
+              <div class="-mr-2">
+                <button
+                  type="button"
+                  class="rounded-md p-2 text-reimii"
+                  x-on:click="mobileMenuOpen = false"
+                  aria-label="Cerrar menú"
+                >
+                  {% if section.settings.close_icon != blank %}
+                    {{
+                      section.settings.close_icon
+                      | image_url: width: section.settings.close_icon_width
+                      | image_tag: alt: 'Cerrar menú', width: section.settings.close_icon_width, class: 'h-auto'
+                    }}
+                  {% else %}
+                    {% render 'icons-close' %}
+                  {% endif %}
+                </button>
+              </div>
+            </div>
+
+            <!-- MOBILE NAVIGATION -->
+            <div class="pt-3">
+              <nav class="grid gap-y-7">
+                {% for link in main_manu_linklist.links %}
+                  {% if link.links != blank %}
+                    <div
+                      class="relative"
+                      x-data="{ submenuOpen: false }"
+                    >
+                      <button
+                        type="button"
+                        class="p-3 flex justify-between w-full rounded-md text-reimii hover:text-reimii-pink-dark hover:bg-reimii-pink-soft"
+                        x-on:click="submenuOpen = !submenuOpen"
+                        :aria-expanded="submenuOpen"
+                      >
+                        <span>{{ link.title }}</span>
+
+                        <span
+                          class="transition-transform duration-200"
+                          :class="{ 'rotate-180': submenuOpen }"
+                        >
+                          {% if section.settings.dropdown_icon != blank %}
+                            {{
+                              section.settings.dropdown_icon
+                              | image_url: width: section.settings.dropdown_icon_width
+                              | image_tag: alt: '', width: section.settings.dropdown_icon_width, class: 'h-auto'
+                            }}
+                          {% else %}
+                            {% render 'icons-dropdown' %}
+                          {% endif %}
+                        </span>
+                      </button>
+
+                      <div
+                        class="grid gap-y-3 pt-3"
+                        x-show="submenuOpen"
+                        x-collapse
+                      >
+                        {% for sublink in link.links %}
+                          <a
+                            href="{{ sublink.url }}"
+                            class="p-3 mx-3 flex items-center rounded-md text-reimii hover:text-reimii-pink-dark hover:bg-reimii-pink-soft"
+                          >
+                            {{ sublink.title }}
+                          </a>
+                        {% endfor %}
+                      </div>
+                    </div>
+
+                  {% else %}
+                    <a
+                      href="{{ link.url }}"
+                      class="p-3 flex items-center rounded-md text-reimii hover:text-reimii-pink-dark hover:bg-reimii-pink-soft"
+                    >
+                      {{ link.title }}
+                    </a>
+                  {% endif %}
+                {% endfor %}
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESKTOP NAVIGATION -->
       <nav class="hidden md:flex space-x-10">
-        {% for link in linklists['main-menu'].links %}
-          {% if link.links['main-menu'].links %}
-            <div class="relative">
+        {% for link in main_manu_linklist.links %}
+          {% if link.links != blank %}
+            <div
+              class="relative"
+              x-data="{ open: false }"
+            >
               <button
+                x-on:click="open = !open"
                 type="button"
-                class="text-reimii-white hover:text-reimii-pink"
-                aria-expanded="false"
+                class="flex items-center gap-2 text-reimii-white hover:text-reimii-pink"
+                :aria-expanded="open"
               >
-                {{ link.title }}
+                <span>{{ link.title }}</span>
+
+                <span
+                  class="transition-transform duration-200"
+                  :class="{ 'rotate-180': open }"
+                >
+                  {% if section.settings.dropdown_icon != blank %}
+                    {{
+                      section.settings.dropdown_icon
+                      | image_url: width: section.settings.dropdown_icon_width
+                      | image_tag: alt: '', width: section.settings.dropdown_icon_width, class: 'h-auto'
+                    }}
+                  {% else %}
+                    {% render 'icons-dropdown' %}
+                  {% endif %}
+                </span>
               </button>
+
+              <div
+                x-show="open"
+                x-cloak
+                @click.away="open = false"
+                @keydown.escape.window="open = false"
+                class="absolute z-50 -ml-5 mt-5 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+              >
+                <div class="shadow-lg border ring-black ring-opacity-5 overflow-hidden rounded-lg">
+                  <div class="relative grid gap-6 bg-reimii-white px-5 py-6 sm:gap-8 sm:p-8">
+                    {% for sublink in link.links %}
+                      <a
+                        href="{{ sublink.url }}"
+                        class="-m-3 p-3 flex items-start rounded-lg hover:bg-reimii-pink-soft text-reimii hover:text-reimii-pink-dark"
+                      >
+                        <div class="ml-4">
+                          <p class="font-reimii font-medium">
+                            {{ sublink.title }}
+                          </p>
+                        </div>
+                      </a>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
             </div>
 
           {% else %}
             <div class="relative">
-              <a href="{{ link.url }}" class="text-reimii-white hover:text-reimii-pink">
+              <a
+                href="{{ link.url }}"
+                class="text-reimii-white hover:text-reimii-pink"
+              >
                 {{ link.title }}
               </a>
             </div>
@@ -38,13 +235,155 @@
         {% endfor %}
       </nav>
 
+      <!-- DESKTOP ACTIONS -->
       <div class="hidden md:flex items-center justify-end md:flex-1 space-x-5">
-        <a href="{{ routes.cart_url }}" class="whitespace-nowrap text-reimii-white hover:text-reimii-pink">
-          {% render 'icons-shopping-cart' %}
+        <a
+          href="{{ routes.cart_url }}"
+          class="whitespace-nowrap text-reimii-white hover:text-reimii-pink"
+          aria-label="Carrito"
+        >
+          {% if section.settings.cart_icon != blank %}
+            {{
+              section.settings.cart_icon
+              | image_url: width: section.settings.cart_icon_width
+              | image_tag: alt: 'Carrito', width: section.settings.cart_icon_width, class: 'h-auto'
+            }}
+          {% else %}
+            {% render 'icons-shopping-cart' %}
+          {% endif %}
         </a>
-        <a href="{{ routes.account_login_url }}" class="text-reimii-white hover:text-reimii-pink">Login</a>
-        <a href="{{ routes.account_register_url }}" class="text-reimii-white hover:text-reimii-pink">Register</a>
+        {% if shop.customer_accounts_enabled %}
+          <a
+            href="{{ routes.account_login_url }}"
+            class="text-reimii-white hover:text-reimii-pink"
+          >
+            Login
+          </a>
+
+          <a
+            href="{{ routes.account_register_url }}"
+            class="text-reimii-white hover:text-reimii-pink"
+          >
+            Register
+          </a>
+        {% endif %}
       </div>
     </div>
   </div>
 </div>
+
+{% schema %}
+{
+  "name": "Header Navigation",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo principal"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Ancho del logo",
+      "min": 80,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "default": 180
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_logo",
+      "label": "Logo del menú móvil"
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_width",
+      "label": "Ancho del logo móvil",
+      "min": 60,
+      "max": 240,
+      "step": 5,
+      "unit": "px",
+      "default": 140
+    },
+    {
+      "type": "header",
+      "content": "Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Menú principal",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Iconos"
+    },
+    {
+      "type": "image_picker",
+      "id": "hamburger_icon",
+      "label": "Icono hamburguesa"
+    },
+    {
+      "type": "range",
+      "id": "hamburger_width",
+      "label": "Tamaño del icono hamburguesa",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "image_picker",
+      "id": "close_icon",
+      "label": "Icono de cerrar"
+    },
+    {
+      "type": "range",
+      "id": "close_icon_width",
+      "label": "Tamaño del icono de cerrar",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "image_picker",
+      "id": "dropdown_icon",
+      "label": "Icono desplegable"
+    },
+    {
+      "type": "range",
+      "id": "dropdown_icon_width",
+      "label": "Tamaño del icono desplegable",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "image_picker",
+      "id": "cart_icon",
+      "label": "Icono del carrito"
+    },
+    {
+      "type": "range",
+      "id": "cart_icon_width",
+      "label": "Tamaño del icono del carrito",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    }
+  ]
+}
+{% endschema %}
