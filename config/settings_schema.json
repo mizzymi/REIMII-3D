@@ -14,6 +14,12 @@
         "type": "image_picker",
         "id": "favicon",
         "label": "Favicon"
+      },
+      {
+        "type": "image_picker",
+        "id": "social_sharing_image",
+        "label": "Imagen para compartir",
+        "info": "Recomendado: 1200 x 630 px"
       }
     ]
   },
