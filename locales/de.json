@@ -217,6 +217,14 @@
           "default_message": {
             "many": "Die gewählte Lieferart ist für diese Artikel nicht mehr verfügbar."
           }
+        },
+        "unshippable_product": {
+          "header": {
+            "many": "Keine Lieferung verfügbar für %{count} Artikel"
+          },
+          "message": {
+            "many": "Diese Artikel werden aus dem Warenkorb entfernt, da für deine Adresse keine Liefermöglichkeiten verfügbar sind."
+          }
         }
       },
       "shipping": {
@@ -383,6 +391,84 @@
         "detail_item_label": {
           "many": "{{count}} Artikel"
         }
+      },
+      "thank_you": {
+        "login_reorder_link_text": {
+          "many": "Diese Produkte auch kaufen"
+        },
+        "gift_card_confirmation_by_text_typ": {
+          "many": "In wenigen Minuten erhältst du eine SMS mit deinen Geschenkkarten."
+        },
+        "gift_card_confirmation_by_email_typ": {
+          "many": "In wenigen Minuten erhältst du eine E-Mail mit deinen Geschenkkarten."
+        },
+        "gift_card_email_title": {
+          "many": "Per E-Mail versendete Geschenkkarten"
+        },
+        "gift_card_text_title": {
+          "many": "Geschenkkarten per SMS versendet"
+        },
+        "gift_card_resent_confirmation": {
+          "many": "Die Geschenkkarten wurden weitergeleitet."
+        },
+        "gift_card_resend_failure": {
+          "many": "Beim Weiterleiten deiner Geschenkkarten ist ein Fehler aufgetreten. Bitte versuche es erneut oder kontaktiere uns."
+        },
+        "thank_you_unconfirmed_items_heading": {
+          "many": "Einige Artikel sind nicht bestätigt."
+        },
+        "thank_you_unconfirmed_items_description": {
+          "many": "Die Artikel wurden dir nicht berechnet."
+        },
+        "thank_you_item_label": {
+          "many": "%{count} Artikel"
+        },
+        "items_fulfilled_by_store": {
+          "many": "Die Artikel, die Sie gekauft haben, stammen aus anderen Geschäften."
+        }
+      },
+      "subscriptions": {
+        "recurring_totals_with_policies": {
+          "first_cycles": {
+            "many": "Erste %{count} Zahlungen jeweils %{total_price}"
+          }
+        },
+        "recurring_total_intervals": {
+          "day": {
+            "many": "%{count} Tage"
+          },
+          "week": {
+            "many": "%{count} Wochen"
+          },
+          "month": {
+            "many": "%{count} Monate"
+          },
+          "year": {
+            "many": "%{count} Jahre"
+          }
+        },
+        "recurring_totals_with_initial_order_shipping_discount_with_policies": {
+          "first_cycles": {
+            "many": ", dann %{count} Zahlungen von jeweils %{total_price}"
+          }
+        }
+      },
+      "throttle": {
+        "estimated_wait_time": {
+          "many": "Geschätzte Wartezeit: {{count}} Minuten"
+        }
+      }
+    },
+    "notices": {
+      "order": {
+        "cancel_reason": {
+          "many": "Ein anderer"
+        }
+      }
+    },
+    "page_titles": {
+      "search_results": {
+        "many": "Suche: %{count} Ergebnisse gefunden für \"%{terms}\""
       }
     }
   }
