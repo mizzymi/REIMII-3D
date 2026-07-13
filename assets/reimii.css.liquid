@@ -1887,8 +1887,12 @@ textarea {
 /* =========================================================
    BADGES
 ========================================================= */
+.collection-product-media {
+  position: relative;
+}
 
 .collection-product-badge {
+  position: absolute;
   top: 0.75rem;
   left: 0.75rem;
   padding: 0.35rem 0.75rem;
@@ -1896,6 +1900,7 @@ textarea {
   font-size: 0.7rem;
   font-weight: 700;
   box-shadow: none;
+  z-index: 2;
 }
 
 .collection-product-badge-sale {
@@ -1906,10 +1911,6 @@ textarea {
 .collection-product-badge-sold-out {
   background: var(--r-disabled);
   color: var(--r-text);
-}
-
-.collection-product-media {
-  position: relative;
 }
 
 .collection-product-sell,
