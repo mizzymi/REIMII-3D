@@ -53,6 +53,7 @@
           name="id"
           value="{{ current_variant.id }}"
           data-variant-id
+          data-available="{{ current_variant.available }}"
         >
 
         {% unless product.has_only_default_variant %}
@@ -126,14 +127,29 @@
 
         <button
           type="submit"
-          class="reimii-product__add-button"
+          class="reimii-product__submit"
           data-add-to-cart
           data-default-text="Añadir al carrito"
+          {% unless product.selected_or_first_available_variant.available %}
+            disabled
+          {% endunless %}
         >
-          <span data-add-to-cart-text>Añadir al carrito</span>
+          <span data-add-to-cart-text>
+            {% if product.selected_or_first_available_variant.available %}
+              Añadir al carrito
+            {% else %}
+              Agotado
+            {% endif %}
+          </span>
         </button>
 
-        <div class="reimii-shop-pay">
+        <div
+          class="reimii-shop-pay"
+          data-shop-pay
+          {% unless current_variant.available %}
+            hidden
+          {% endunless %}
+        >
           {{ form | payment_button }}
         </div>
 
@@ -178,6 +194,14 @@
 
   {% form 'product', product, class: 'reimii-sticky-atc__form' %}
     <input
+      type="hidden"
+      name="id"
+      value="{{ current_variant.id }}"
+      data-sticky-variant-id
+      data-available="{{ current_variant.available }}"
+    >
+
+    <input
       type="number"
       name="quantity"
       value="1"
@@ -192,27 +216,54 @@
       class="reimii-sticky-atc__button"
       data-add-to-cart
       data-default-text="Añadir al carrito"
+      {% unless current_variant.available %}
+        disabled
+      {% endunless %}
     >
-      <span data-add-to-cart-text>Añadir al carrito</span>
+      <span data-add-to-cart-text>
+        {% if current_variant.available %}
+          Añadir al carrito
+        {% else %}
+          Agotado
+        {% endif %}
+      </span>
     </button>
   {% endform %}
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // VARIANTES + PRECIO + STICKY ATC
+    const gallery = document.querySelector('.reimii-product__gallery');
+    const prevButton = document.querySelector('.reimii-gallery-arrow.prev');
+    const nextButton = document.querySelector('.reimii-gallery-arrow.next');
+
     document.querySelectorAll('[data-reimii-product-form]').forEach((formWrapper) => {
       const productJson = formWrapper.querySelector('[data-product-json]');
+
       const variantInput = formWrapper.querySelector('[data-variant-id]');
-      const buttons = formWrapper.querySelectorAll('[data-option-position]');
+
+      const optionButtons = formWrapper.querySelectorAll('[data-option-position]');
+
       const priceBox = document.querySelector('[data-product-price]');
+
       const stickyVariantInput = document.querySelector('[data-sticky-variant-id]');
+
       const stickyPrice = document.querySelector('[data-sticky-price]');
+
+      const shopPay = formWrapper.querySelector('[data-shop-pay]');
 
       if (!productJson || !variantInput) return;
 
-      const variants = JSON.parse(productJson.textContent);
-      const selected = {};
+      let variants = [];
+
+      try {
+        variants = JSON.parse(productJson.textContent);
+      } catch (error) {
+        console.error('No se pudieron cargar las variantes.', error);
+        return;
+      }
+
+      const selectedOptions = {};
 
       const formatMoney = (cents) => {
         return new Intl.NumberFormat('es-ES', {
@@ -221,83 +272,156 @@
         }).format(cents / 100);
       };
 
-      buttons.forEach((button) => {
+      const updatePrice = (variant) => {
+        if (priceBox) {
+          if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+            priceBox.innerHTML = `
+                <span>${formatMoney(variant.price)}</span>
+                <s>${formatMoney(variant.compare_at_price)}</s>
+              `;
+          } else {
+            priceBox.innerHTML = `
+                <span>${formatMoney(variant.price)}</span>
+              `;
+          }
+        }
+
+        if (stickyPrice) {
+          stickyPrice.textContent = formatMoney(variant.price);
+        }
+      };
+
+      const updateVariantImage = (variant) => {
+        if (!gallery || !variant.featured_image) return;
+
+        const mediaId = variant.featured_image.id;
+
+        const image = gallery.querySelector(`[data-media-id="${mediaId}"]`);
+
+        if (!image) return;
+
+        gallery.scrollTo({
+          left: image.offsetLeft,
+          behavior: 'smooth',
+        });
+      };
+
+      const updateVariantInputs = (variant) => {
+        const available = String(variant.available);
+
+        variantInput.value = variant.id;
+        variantInput.dataset.available = available;
+
+        if (stickyVariantInput) {
+          stickyVariantInput.value = variant.id;
+          stickyVariantInput.dataset.available = available;
+        }
+
+        /*
+         * Los cambios de value hechos por JavaScript no siempre
+         * activan los observadores, por eso disparamos change.
+         */
+        variantInput.dispatchEvent(
+          new Event('change', {
+            bubbles: true,
+          })
+        );
+
+        if (stickyVariantInput) {
+          stickyVariantInput.dispatchEvent(
+            new Event('change', {
+              bubbles: true,
+            })
+          );
+        }
+      };
+
+      const updatePaymentButton = (variant) => {
+        if (!shopPay) return;
+
+        shopPay.hidden = !variant.available;
+      };
+
+      const selectVariant = () => {
+        const matchedVariant = variants.find((variant) => {
+          return variant.options.every((optionValue, index) => {
+            return selectedOptions[index + 1] === optionValue;
+          });
+        });
+
+        if (!matchedVariant) return;
+
+        updateVariantInputs(matchedVariant);
+        updatePrice(matchedVariant);
+        updateVariantImage(matchedVariant);
+        updatePaymentButton(matchedVariant);
+
+        document.dispatchEvent(
+          new CustomEvent('reimii:variant-changed', {
+            detail: {
+              variant: matchedVariant,
+            },
+          })
+        );
+      };
+
+      optionButtons.forEach((button) => {
         if (button.classList.contains('is-active')) {
-          selected[button.dataset.optionPosition] = button.dataset.optionValue;
+          selectedOptions[button.dataset.optionPosition] = button.dataset.optionValue;
         }
 
         button.addEventListener('click', () => {
           const position = button.dataset.optionPosition;
+
           const value = button.dataset.optionValue;
 
-          selected[position] = value;
+          selectedOptions[position] = value;
 
-          formWrapper
-            .querySelectorAll(`[data-option-position="${position}"]`)
-            .forEach((btn) => btn.classList.remove('is-active'));
+          formWrapper.querySelectorAll(`[data-option-position="${position}"]`).forEach((optionButton) => {
+            optionButton.classList.remove('is-active');
+          });
 
           button.classList.add('is-active');
 
-          const label = formWrapper.querySelector(`[data-selected-option="${position}"]`);
-          if (label) label.textContent = value;
+          const selectedLabel = formWrapper.querySelector(`[data-selected-option="${position}"]`);
 
-          const matchedVariant = variants.find((variant) => {
-            return variant.options.every((optionValue, index) => {
-              return selected[index + 1] === optionValue;
-            });
-          });
-
-          if (!matchedVariant) return;
-
-          variantInput.value = matchedVariant.id;
-
-          // Cambiar imagen al seleccionar variante
-          if (matchedVariant.featured_image) {
-            const mediaId = matchedVariant.featured_image.id;
-
-            const image = gallery?.querySelector(`[data-media-id="${mediaId}"]`);
-
-            if (image) {
-              gallery.scrollTo({
-                left: image.offsetLeft,
-                behavior: 'smooth',
-              });
-            }
+          if (selectedLabel) {
+            selectedLabel.textContent = value;
           }
 
-          if (stickyVariantInput) {
-            stickyVariantInput.value = matchedVariant.id;
-          }
-
-          if (priceBox) {
-            if (matchedVariant.compare_at_price && matchedVariant.compare_at_price > matchedVariant.price) {
-              priceBox.innerHTML = `
-                <span>${formatMoney(matchedVariant.price)}</span>
-                <s>${formatMoney(matchedVariant.compare_at_price)}</s>
-              `;
-            } else {
-              priceBox.innerHTML = `<span>${formatMoney(matchedVariant.price)}</span>`;
-            }
-          }
-
-          if (stickyPrice) {
-            stickyPrice.textContent = formatMoney(matchedVariant.price);
-          }
+          selectVariant();
         });
       });
+
+      /*
+       * Garantiza que el botón Comprar ahora tenga
+       * el estado correcto al cargar.
+       */
+      const initialVariant = variants.find((variant) => String(variant.id) === String(variantInput.value));
+
+      if (initialVariant) {
+        variantInput.dataset.available = String(initialVariant.available);
+
+        if (stickyVariantInput) {
+          stickyVariantInput.value = initialVariant.id;
+          stickyVariantInput.dataset.available = String(initialVariant.available);
+        }
+
+        updatePaymentButton(initialVariant);
+      }
     });
 
     // GALERÍA CON FLECHAS
-    const gallery = document.querySelector('.reimii-product__gallery');
-    const prevButton = document.querySelector('.reimii-gallery-arrow.prev');
-    const nextButton = document.querySelector('.reimii-gallery-arrow.next');
-
     if (gallery && prevButton && nextButton) {
       const getSlideWidth = () => {
         const slide = gallery.querySelector('.reimii-product__image');
+
         if (!slide) return gallery.clientWidth;
-        const gap = parseInt(getComputedStyle(gallery).gap || 0, 10);
-        return slide.getBoundingClientRect().width + gap;
+
+        const styles = getComputedStyle(gallery);
+        const gap = Number.parseInt(styles.gap || '0', 10);
+
+        return slide.getBoundingClientRect().width + (Number.isFinite(gap) ? gap : 0);
       };
 
       nextButton.addEventListener('click', () => {
@@ -349,6 +473,7 @@
       if (!quantityInput) return;
 
       const quantity = normalizeQuantity(quantityInput.value);
+
       quantityInput.value = quantity;
 
       stickyQuantityInputs.forEach((input) => {
@@ -356,10 +481,20 @@
       });
     };
 
+    const getVariantInput = (form) => {
+      return form.querySelector('[name="id"]');
+    };
+
     const getVariantId = (form) => {
-      const variantInput = form.querySelector('[name="id"]');
+      const variantInput = getVariantInput(form);
 
       return variantInput ? String(variantInput.value) : null;
+    };
+
+    const variantIsAvailable = (form) => {
+      const variantInput = getVariantInput(form);
+
+      return variantInput?.dataset.available === 'true';
     };
 
     const getButton = (form) => {
@@ -385,9 +520,22 @@
     const updateButtonForForm = (form) => {
       const button = getButton(form);
 
-      if (!button || button.dataset.loading === 'true') return;
+      if (!button || button.dataset.loading === 'true') {
+        return;
+      }
 
       const variantId = getVariantId(form);
+      const available = variantIsAvailable(form);
+
+      if (!available) {
+        button.disabled = true;
+        button.removeAttribute('aria-busy');
+        setButtonText(button, 'Agotado');
+        return;
+      }
+
+      button.disabled = false;
+      button.removeAttribute('aria-busy');
 
       setButtonText(
         button,
@@ -396,16 +544,24 @@
     };
 
     const updateAllButtons = () => {
-      productForms.forEach(updateButtonForForm);
+      productForms.forEach((form) => {
+        updateButtonForForm(form);
+      });
     };
 
     const updateVisibleCartCounters = (cart) => {
-      document
-        .querySelectorAll(['[data-cart-count]', '.cart-count', '.header-cart-count', '.reimii-cart-count'].join(','))
-        .forEach((counter) => {
-          counter.textContent = cart.item_count;
-          counter.hidden = cart.item_count === 0;
-        });
+      const itemCount = Number(cart.item_count) || 0;
+
+      const visibleCount = itemCount > 9 ? '+9' : String(itemCount);
+
+      document.querySelectorAll('[data-cart-count]').forEach((counter) => {
+        counter.textContent = visibleCount;
+        counter.hidden = itemCount === 0;
+      });
+
+      document.querySelectorAll('.reimii-header-cart').forEach((cartLink) => {
+        cartLink.setAttribute('aria-label', `Carrito, ${itemCount} ${itemCount === 1 ? 'artículo' : 'artículos'}`);
+      });
     };
 
     const loadCart = async () => {
@@ -428,7 +584,9 @@
 
       document.dispatchEvent(
         new CustomEvent('reimii:cart-updated', {
-          detail: { cart },
+          detail: {
+            cart,
+          },
         })
       );
 
@@ -452,6 +610,7 @@
     });
 
     quantityInput?.addEventListener('change', syncQuantity);
+
     quantityInput?.addEventListener('input', syncQuantity);
 
     productForms.forEach((form) => {
@@ -461,6 +620,12 @@
         const button = getButton(form);
 
         if (!button || button.dataset.loading === 'true') {
+          return;
+        }
+
+        if (!variantIsAvailable(form)) {
+          button.disabled = true;
+          setButtonText(button, 'Agotado');
           return;
         }
 
@@ -495,7 +660,6 @@
 
           window.setTimeout(() => {
             button.dataset.loading = 'false';
-            button.disabled = false;
             button.removeAttribute('aria-busy');
 
             updateButtonForForm(form);
@@ -503,11 +667,17 @@
         } catch (error) {
           console.error(error);
 
-          setButtonText(button, 'Inténtalo de nuevo');
-
           button.dataset.loading = 'false';
-          button.disabled = false;
           button.removeAttribute('aria-busy');
+
+          if (!variantIsAvailable(form)) {
+            button.disabled = true;
+            setButtonText(button, 'Agotado');
+            return;
+          }
+
+          button.disabled = false;
+          setButtonText(button, 'Inténtalo de nuevo');
 
           window.setTimeout(() => {
             updateButtonForForm(form);
@@ -515,11 +685,7 @@
         }
       });
 
-      /*
-       * El selector de variantes del tema modifica el input name="id".
-       * Este observador detecta ese cambio y actualiza el texto del botón.
-       */
-      const variantInput = form.querySelector('[name="id"]');
+      const variantInput = getVariantInput(form);
 
       if (variantInput) {
         variantInput.addEventListener('change', () => {
@@ -530,9 +696,13 @@
           updateAllButtons();
         }).observe(variantInput, {
           attributes: true,
-          attributeFilter: ['value'],
+          attributeFilter: ['value', 'data-available'],
         });
       }
+    });
+
+    document.addEventListener('reimii:variant-changed', () => {
+      updateAllButtons();
     });
 
     syncQuantity();
@@ -542,9 +712,6 @@
       updateAllButtons();
     });
 
-    /*
-     * Permite que otros scripts del tema soliciten una actualización.
-     */
     document.addEventListener('reimii:refresh-cart-buttons', () => {
       loadCart().catch(console.warn);
     });

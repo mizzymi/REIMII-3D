@@ -22,31 +22,32 @@
           {{ 'product-1' | placeholder_svg_tag: 'placeholder-image' }}
         </div>
       {% endif %}
-
-      {% if section.settings.show_sold_out_badge %}
-        {% unless product.available %}
-          <span class="collection-product-badge collection-product-badge-sold-out"> Agotado </span>
-        {% endunless %}
-      {% endif %}
-
-      {% if section.settings.show_sale_badge %}
-        {% if product.compare_at_price > product.price and product.available %}
-          <span class="collection-product-badge collection-product-badge-sale"> Oferta </span>
+      <div class="collection-product-badges">
+        {% if section.settings.show_sold_out_badge %}
+          {% unless product.available %}
+            <span class="collection-product-badge collection-product-badge-sold-out"> Agotado </span>
+          {% endunless %}
         {% endif %}
-      {% endif %}
 
-      {% if section.settings.show_new_badge %}
-        {% assign current_timestamp = 'now' | date: '%s' | plus: 0 %}
-        {% assign product_timestamp = product.created_at | date: '%s' | plus: 0 %}
-        {% assign new_product_days = section.settings.new_product_days | plus: 0 %}
+        {% if section.settings.show_new_badge %}
+          {% assign current_timestamp = 'now' | date: '%s' | plus: 0 %}
+          {% assign product_timestamp = product.created_at | date: '%s' | plus: 0 %}
+          {% assign new_product_days = section.settings.new_product_days | plus: 0 %}
 
-        {% assign seconds_since_created = current_timestamp | minus: product_timestamp %}
-        {% assign days_since_created = seconds_since_created | divided_by: 86400 %}
+          {% assign seconds_since_created = current_timestamp | minus: product_timestamp %}
+          {% assign days_since_created = seconds_since_created | divided_by: 86400 %}
 
-        {% if product.created_at != blank and days_since_created >= 0 and days_since_created <= new_product_days %}
-          <span class="collection-product-badge collection-product-badge-new"> Nuevo </span>
+          {% if product.created_at != blank and days_since_created >= 0 and days_since_created <= new_product_days %}
+            <span class="collection-product-badge collection-product-badge-new"> Nuevo </span>
+          {% endif %}
         {% endif %}
-      {% endif %}
+
+        {% if section.settings.show_sale_badge %}
+          {% if product.compare_at_price > product.price and product.available %}
+            <span class="collection-product-badge collection-product-badge-sale"> Oferta </span>
+          {% endif %}
+        {% endif %}
+      </div>
       {% if product.metafields.custom.vendidos.value > 0 %}
         <p class="collection-product-sell">{{ product.metafields.custom.vendidos.value }} vendidos</p>
       {% endif %}

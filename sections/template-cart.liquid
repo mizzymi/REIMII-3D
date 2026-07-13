@@ -43,13 +43,6 @@
                         {{ item.variant.title }}
                       </span>
                     {% endunless %}
-
-                    <a
-                      href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
-                      class="cart-product-remove"
-                    >
-                      Eliminar
-                    </a>
                   </td>
 
                   <td class="cart-price">
@@ -82,6 +75,12 @@
                         {{ discount.discount_application.title }}
                       </span>
                     {% endfor %}
+                    <a
+                      href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
+                      class="cart-product-remove"
+                    >
+                      Eliminar
+                    </a>
                   </td>
                 </tr>
               {% endfor %}

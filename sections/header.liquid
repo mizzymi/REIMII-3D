@@ -38,8 +38,8 @@
         <div class="flex items-center justify-end">
           <a
             href="{{ routes.cart_url }}"
-            class="whitespace-nowrap text-reimii-white hover:text-reimii-pink"
-            aria-label="Carrito"
+            class="reimii-header-cart whitespace-nowrap text-reimii-white hover:text-reimii-pink"
+            aria-label="Carrito, {{ cart.item_count }} artículos"
           >
             {% if section.settings.cart_icon != blank %}
               {{
@@ -50,6 +50,20 @@
             {% else %}
               {% render 'icons-shopping-cart' %}
             {% endif %}
+            <span
+              class="reimii-header-cart__count"
+              data-cart-count
+              {% if cart.item_count == 0 %}
+                hidden
+              {% endif %}
+              aria-hidden="true"
+            >
+              {% if cart.item_count > 9 %}
+                +9
+              {% else %}
+                {{ cart.item_count }}
+              {% endif %}
+            </span>
           </a>
           <button
             type="button"
@@ -331,7 +345,7 @@
       <div class="flex justify-end items-center space-x-5">
         <a
           href="{{ routes.cart_url }}"
-          class="whitespace-nowrap text-reimii-white hover:text-reimii-pink"
+          class="reimii-header-cart whitespace-nowrap text-reimii-white hover:text-reimii-pink"
           aria-label="Carrito"
         >
           {% if section.settings.cart_icon != blank %}
@@ -343,6 +357,20 @@
           {% else %}
             {% render 'icons-shopping-cart' %}
           {% endif %}
+          <span
+            class="reimii-header-cart__count"
+            data-cart-count
+            {% if cart.item_count == 0 %}
+              hidden
+            {% endif %}
+            aria-hidden="true"
+          >
+            {% if cart.item_count > 9 %}
+              +9
+            {% else %}
+              {{ cart.item_count }}
+            {% endif %}
+          </span>
         </a>
         {% if shop.customer_accounts_enabled %}
           <a

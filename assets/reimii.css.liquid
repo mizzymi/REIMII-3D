@@ -541,6 +541,45 @@ textarea {
   justify-self: end;
 }
 
+.reimii-header-cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reimii-header-cart__count {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+
+  border: 2px solid #171717;
+  border-radius: 999px;
+
+  background: #f7a9d4;
+  color: #171717;
+
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+.reimii-header-cart__count[hidden] {
+  display: none;
+}
+
 /* =========================================================
    PAGINATION
 ========================================================= */
@@ -1891,19 +1930,30 @@ textarea {
   position: relative;
 }
 
-.collection-product-badge {
+.collection-product-badges {
   position: absolute;
   top: 0.75rem;
   left: 0.75rem;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 0.4rem;
+  z-index: 2;
+}
+
+.collection-product-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
   font-size: 0.7rem;
   font-weight: 700;
-  box-shadow: none;
-  z-index: 2;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .collection-product-badge-sale {
+  grid-column: 1;
   background: var(--r-gradient-primary);
   color: var(--r-white);
 }
@@ -1914,7 +1964,7 @@ textarea {
 }
 
 .collection-product-badge-new {
-  background-color: var(--r-surface-pink);
+  background: var(--r-surface-pink);
   color: var(--r-pink-dark);
 }
 
@@ -4804,6 +4854,7 @@ textarea {
   .reimii-product__quantity {
     width: 82px;
     min-height: 46px;
+    text-align: center;
     font-size: 16px;
     border-radius: 14px;
   }
@@ -5644,4 +5695,17 @@ textarea {
     transition: none !important;
     animation: none !important;
   }
+}
+
+[data-add-to-cart]:disabled {
+  background: var(--r-muted);
+  color: var(--r-white);
+  cursor: not-allowed;
+  opacity: 1;
+  box-shadow: none;
+}
+
+[data-add-to-cart]:disabled:hover {
+  background: var(--r-muted-dark);
+  transform: none;
 }
