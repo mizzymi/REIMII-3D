@@ -16,7 +16,7 @@
         "settings": {
           "logo": "shopify://shop_images/LogoType_on_dark.svg",
           "logo_width": 180,
-          "mobile_logo": "shopify://shop_images/LogoType.svg",
+          "mobile_logo": "shopify://shop_images/LogoType.png",
           "mobile_logo_width": 140,
           "main_menu": "main-menu",
           "hamburger_icon": "shopify://shop_images/Hamburguer_menu_in_dark.svg",
