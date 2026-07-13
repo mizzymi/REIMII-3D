@@ -1858,6 +1858,36 @@ textarea {
   text-align: left;
 }
 
+.collection-product-sell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  padding: 0.45rem 0.8rem;
+  color: var(--r-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  background: var(--r-surface);
+  border: 1px solid var(--r-primary-soft);
+  border-radius: var(--r-pill);
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.collection-product:hover .collection-product-sell {
+  background: var(--r-surface-purple);
+  border-color: var(--r-primary);
+  transform: translateY(-1px);
+}
+
+.collection-product-sell::before {
+  content: "🔥";
+  font-size: 0.85rem;
+}
+
 .collection-product-price {
   display: flex;
   align-items: center;
@@ -2047,6 +2077,12 @@ textarea {
 
   .collection-heading .collection-title {
     text-align: center;
+  }
+
+  .collection-product-sell {
+    margin-top: 0.6rem;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.68rem;
   }
 }
 
