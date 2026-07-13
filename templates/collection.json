@@ -1,11 +1,29 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name":"Collection",
-  "sections":{
-    "template":{
-      "type":"template-collection"
+  "sections": {
+    "template": {
+      "type": "template-collection",
+      "settings": {
+        "show_collection_image": true,
+        "show_description": true,
+        "show_product_count": true,
+        "show_vendor": true,
+        "show_sale_badge": true,
+        "show_sold_out_badge": true,
+        "show_new_badge": true,
+        "new_product_days": 14
+      }
     }
   },
-  "order":[
+  "order": [
     "template"
   ]
 }

@@ -1,5 +1,13 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "Index",
   "sections": {
     "hero": {
       "type": "hero",
@@ -10,33 +18,70 @@
         "button_label": "Ver la tienda",
         "button_link": "shopify://collections/all",
         "secondary_button_label": "Explorar colecciones",
-        "secondary_button_link": "shopify://collections"
+        "secondary_button_link": "shopify://collections",
+        "image": "shopify://shop_images/28_efa96e2b-38ec-4474-9cea-70af2de962d5.png",
+        "mobile_image": "shopify://shop_images/30_d2fec3f9-b438-426e-8bee-6e7bb01be7cc.png",
+        "content_alignment": "left",
+        "overlay_opacity": 20,
+        "desktop_height": 650,
+        "mobile_height": 560
       }
     },
-
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "featured_collection": "all",
-        "heading": "Nuestros favoritos",
-        "products_to_show": 8,
-        "show_vendor": false,
-        "show_sale_badge": true,
-        "show_sold_out_badge": true,
-        "show_new_badge": true
+        "title": "Coleccion Destacada",
+        "featured_collection": "fluffy-mascots",
+        "number_of_products_to_show": 4
       }
     },
-
     "shop-benefits": {
       "type": "shop-benefits",
+      "blocks": {
+        "benefit_LfXkjp": {
+          "type": "benefit",
+          "settings": {
+            "title": "Fabricado con mimo en España",
+            "text": "Cada pieza se produce cuidadosamente para garantizar un acabado bonito, limpio y lleno de personalidad."
+          }
+        },
+        "benefit_nmJQ9z": {
+          "type": "benefit",
+          "settings": {
+            "title": "Diseños únicos y llenos de encanto",
+            "text": "Productos originales, adorables y pensados para coleccionar, regalar o llevar contigo cada día."
+          }
+        },
+        "benefit_7VUKM9": {
+          "type": "benefit",
+          "settings": {
+            "title": "Impresión 3D ligera y resistente",
+            "text": "Piezas cómodas, duraderas y preparadas para el uso diario sin perder su detalle."
+          }
+        },
+        "benefit_6r6Dkt": {
+          "type": "benefit",
+          "settings": {
+            "title": "Un regalo diferente y especial",
+            "text": "Cada producto REIMII 3D está pensado para sorprender y convertir un pequeño detalle en algo memorable."
+          }
+        }
+      },
+      "block_order": [
+        "benefit_LfXkjp",
+        "benefit_nmJQ9z",
+        "benefit_7VUKM9",
+        "benefit_6r6Dkt"
+      ],
       "settings": {
         "heading": "Hecho para sacarte una sonrisa"
       }
     },
-
     "brand-story": {
       "type": "brand-story",
       "settings": {
+        "image": "shopify://shop_images/reimii-logo.png",
+        "eyebrow": "Nuestra historia",
         "heading": "Bienvenido a Reimii",
         "text": "<p>Creamos pequeños personajes impresos en 3D para acompañarte, decorar tu espacio y convertir cada regalo en algo especial.</p>",
         "button_label": "Conoce nuestra historia",
@@ -44,7 +89,6 @@
       }
     }
   },
-
   "order": [
     "hero",
     "featured-collection",
