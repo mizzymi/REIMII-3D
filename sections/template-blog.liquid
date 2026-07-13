@@ -3,8 +3,8 @@
     <h2 class="article-title">
       {{ blog.title }}
     </h2>
-    {% for article in blog.articles %}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="blog-grid">
+      {% for article in blog.articles %}
         <a href="{{ article.url }}">
           <div class="article-item">
             {% if article.image %}
@@ -39,9 +39,8 @@
             </div>
           </div>
         </a>
-      </div>
-    {% endfor %}
-
+      {% endfor %}
+    </div>
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       {% render 'pagination', paginate: paginate %}
     </div>
