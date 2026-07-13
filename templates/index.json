@@ -37,6 +37,42 @@
     },
     "shop-benefits": {
       "type": "shop-benefits",
+      "blocks": {
+        "benefit_LfXkjp": {
+          "type": "benefit",
+          "settings": {
+            "title": "Fabricado con mimo en España",
+            "text": "Cada pieza se produce cuidadosamente para garantizar un acabado bonito, limpio y lleno de personalidad."
+          }
+        },
+        "benefit_nmJQ9z": {
+          "type": "benefit",
+          "settings": {
+            "title": "Diseños únicos y llenos de encanto",
+            "text": "Productos originales, adorables y pensados para coleccionar, regalar o llevar contigo cada día."
+          }
+        },
+        "benefit_7VUKM9": {
+          "type": "benefit",
+          "settings": {
+            "title": "Impresión 3D ligera y resistente",
+            "text": "Piezas cómodas, duraderas y preparadas para el uso diario sin perder su detalle."
+          }
+        },
+        "benefit_6r6Dkt": {
+          "type": "benefit",
+          "settings": {
+            "title": "Un regalo diferente y especial",
+            "text": "Cada producto REIMII 3D está pensado para sorprender y convertir un pequeño detalle en algo memorable."
+          }
+        }
+      },
+      "block_order": [
+        "benefit_LfXkjp",
+        "benefit_nmJQ9z",
+        "benefit_7VUKM9",
+        "benefit_6r6Dkt"
+      ],
       "settings": {
         "heading": "Hecho para sacarte una sonrisa"
       }
@@ -44,6 +80,7 @@
     "brand-story": {
       "type": "brand-story",
       "settings": {
+        "image": "shopify://shop_images/reimii-logo.png",
         "eyebrow": "Nuestra historia",
         "heading": "Bienvenido a Reimii",
         "text": "<p>Creamos pequeños personajes impresos en 3D para acompañarte, decorar tu espacio y convertir cada regalo en algo especial.</p>",
