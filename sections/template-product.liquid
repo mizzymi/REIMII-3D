@@ -30,6 +30,13 @@
     <p class="reimii-product__kicker">REIMII 3D Shop</p>
     <h1>{{ product.title }}</h1>
 
+    <div class="reimii-product__trust">
+      <span>Fabricado en España</span>
+      <span>Impresión 3D premium</span>
+      <span>Ideal para regalar</span>
+      <span>Pago seguro</span>
+    </div>
+    
     <div class="reimii-product__price" data-product-price>
       {% if current_variant.compare_at_price > current_variant.price %}
         <span>{{ current_variant.price | money }}</span>
@@ -37,13 +44,6 @@
       {% else %}
         <span>{{ current_variant.price | money }}</span>
       {% endif %}
-    </div>
-
-    <div class="reimii-product__trust">
-      <span>Fabricado en España</span>
-      <span>Impresión 3D premium</span>
-      <span>Ideal para regalar</span>
-      <span>Pago seguro</span>
     </div>
 
     <div class="reimii-product__form" data-reimii-product-form>
