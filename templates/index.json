@@ -30,8 +30,8 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "title": "Coleccion Destacada",
-        "featured_collection": "fluffy-mascots",
+        "title": "Colección Destacada",
+        "featured_collection": "mas-populares",
         "number_of_products_to_show": 4
       }
     },
