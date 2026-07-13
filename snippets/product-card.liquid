@@ -44,6 +44,9 @@
           <span class="collection-product-badge collection-product-badge-new"> Nuevo </span>
         {% endif %}
       {% endif %}
+      {% if product.metafields.custom.vendidos.value > 0 %}
+        <p class="collection-product-sell">{{ product.metafields.custom.vendidos.value }} vendidos</p>
+      {% endif %}
     </div>
 
     <div class="collection-product-content">
@@ -76,9 +79,6 @@
             </span>
           {% endif %}
         </div>
-        {% if product.metafields.custom.vendidos.value > 0 %}
-          <p class="collection-product-sell">{{ product.metafields.custom.vendidos.value }} vendidos</p>
-        {% endif %}
       </div>
     </div>
   </a>
