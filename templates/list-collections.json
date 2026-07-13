@@ -1,5 +1,13 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "Collections list",
   "sections": {
     "list": {
       "type": "template-list-collections",
@@ -8,7 +16,7 @@
         "description": "<p>Descubre todos los personajes y universos de Reimii.</p>",
         "show_collection_count": true,
         "collections_per_page": 12,
-        "show_product_count": true,
+        "show_product_count": false,
         "show_descriptions": false,
         "show_link": true,
         "link_label": "Explorar colección"
