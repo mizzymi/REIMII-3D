@@ -1,0 +1,205 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "shopify": {
+    "checkout": {
+      "general": {
+        "map": {
+          "cluster_title": {
+            "many": "Gruppe von {{number}} Markern"
+          }
+        }
+      },
+      "customer_account": {
+        "saved_address_option_description": {
+          "many": "Du hast {{count}} gespeicherte Adressen."
+        }
+      },
+      "order_summary": {
+        "unit_price": {
+          "per_item": {
+            "many": "%{price} für %{count} Artikel"
+          }
+        },
+        "expand_component_information": {
+          "many": "Zeige %{count} Artikel an"
+        },
+        "collapse_component_information": {
+          "many": "Verstecke %{count} Artikel"
+        },
+        "discount_discovery": {
+          "merchandise_quantity_label": {
+            "many": "%{count} Artikel"
+          }
+        },
+        "discount_title_stacking": {
+          "many": "Rabatte"
+        },
+        "discount_order_stacking": {
+          "many": "Rabatte auf Bestellungen"
+        },
+        "subtotal_label_with_quantity": {
+          "many": "Zwischensumme · %{count} Artikel"
+        },
+        "number_items": {
+          "many": "%{count} Artikel"
+        },
+        "view_all_items": {
+          "many": "Alle %{count} Artikel anzeigen"
+        },
+        "pickup_unavailable_banner_title": {
+          "many": "Es sind keine Geschäfte mit deinen Artikeln verfügbar."
+        },
+        "pickup_unavailable_banner_title_with_country": {
+          "many": "In %{country} sind keine Geschäfte mit deinen Artikeln verfügbar."
+        },
+        "discount_code_applied_count": {
+          "many": "%{count} Rabatte anzeigen"
+        }
+      },
+      "payment": {
+        "card_fields_unavailable_html": {
+          "many": "Zahlungen mit Debit- und Kreditkarte sind derzeit nicht verfügbar.<br><a href=\"%{current_url}\">Aktualisiere diese Seite</a> oder versuche eine andere Zahlungsmethode."
+        },
+        "expired_cards_info": {
+          "many": "Es gibt %{count} abgelaufene Karten, die du in deinem Konto ansehen und bearbeiten kannst."
+        },
+        "crypto_payment_method": {
+          "cashback_descriptor": {
+            "many": "Du erhältst deine Rückerstattung nach %{count} Tagen."
+          }
+        },
+        "discount_show_more_warnings": {
+          "many": "Mehr %{count} anzeigen"
+        },
+        "discount_codes_removed_summary": {
+          "many": "%{count} Rabattcodes wurden entfernt"
+        },
+        "discount_codes_modified_summary": {
+          "many": "Es wurden %{count} Rabattcodes geändert"
+        },
+        "discount_codes_removed_or_modified_summary": {
+          "many": "%{count} Rabattcodes wurden entfernt oder geändert"
+        }
+      },
+      "order_payment_collection": {
+        "changes_summary": {
+          "added": {
+            "many": "%{count} wurde hinzugefügt."
+          }
+        }
+      },
+      "open_graph_meta_tag": {
+        "title_with_products": {
+          "many": "%{product_name} und %{count} weitere Artikel kaufen"
+        }
+      },
+      "contextual_availability": {
+        "title": {
+          "many": "Produkte nicht verfügbar"
+        },
+        "products_not_available": {
+          "many": "Diese Produkte werden aus deinem Warenkorb entfernt, da sie in deinem Land oder deiner Region nicht verfügbar sind."
+        },
+        "all_products_in_cart_unavailable": {
+          "many": "Diese Produkte sind in deinem Land oder deiner Region nicht verfügbar."
+        }
+      },
+      "deliverability": {
+        "not_deliverable": {
+          "title": {
+            "many": "Keine Lieferung verfügbar für %{count} Artikel"
+          },
+          "message": {
+            "many": "Diese Artikel werden aus dem Warenkorb entfernt, da für deine Adresse keine Liefermöglichkeiten verfügbar sind."
+          }
+        }
+      },
+      "notice_banner": {
+        "validation_errors_banner": {
+          "heading": {
+            "many": "Es gibt {{count}} Fehler:"
+          },
+          "errors_in_section": {
+            "many": "{{count}} Fehler in {{section}}"
+          }
+        }
+      },
+      "local_pickup": {
+        "location_information": {
+          "many": "Es gibt %{count} Filialen mit Lagerbestand in deiner Nähe"
+        },
+        "paginator": {
+          "label": {
+            "many": "%{first} - %{last} von %{count} Geschäften"
+          }
+        },
+        "reveal_more_label": {
+          "many": "Weitere %{count} Filialen anzeigen"
+        },
+        "all_stores_far_away": {
+          "title_with_item": {
+            "many": "Die nächstgelegene Filiale mit deinen verfügbaren Artikeln ist mehr als %{distance} von %{location} entfernt."
+          }
+        },
+        "location_information_far_away": {
+          "many": "%{count} Filialen haben deinen Artikel."
+        },
+        "location_nearby": {
+          "many": "Es gibt %{count} Filialen in der Nähe, in denen dein Artikel verfügbar ist."
+        },
+        "location_nearby_short": {
+          "many": "%{count} Filialen in der Nähe mit deinem Artikel verfügbar"
+        },
+        "location_far_away": {
+          "many": "%{count} Filialen mit deinem Artikel verfügbar"
+        },
+        "toggle_more_locations": {
+          "many": "%{count} weitere Filialen"
+        },
+        "pickup_unavailable_banner_title": {
+          "many": "Es sind keine Filialen mit deinen Artikeln verfügbar."
+        },
+        "pickup_unavailable_banner_title_with_country": {
+          "many": "Es gibt keine Filialen in %{country} mit deinen verfügbaren Artikeln."
+        },
+        "location_information_far_away_one_item": {
+          "many": "Es gibt %{count} Filialen mit deinem Artikel"
+        },
+        "location_information_far_away_other_items": {
+          "many": "Es gibt %{count} Filialen mit deinen Artikeln"
+        },
+        "location_nearby_one_item": {
+          "many": "Es gibt %{count} Filialen in der Nähe mit deinem Artikel."
+        },
+        "location_nearby_other_items": {
+          "many": "Es gibt %{count} Filialen in der Nähe mit deinen Artikeln."
+        },
+        "location_nearby_short_one_item": {
+          "many": "%{count} Filialen in der Nähe mit deinem Artikel"
+        },
+        "location_nearby_short_other_items": {
+          "many": "%{count} Filialen in der Nähe mit deinen Artikeln"
+        },
+        "location_far_away_one_item": {
+          "many": "%{count} Filialen mit deinem Artikel"
+        },
+        "location_far_away_other_items": {
+          "many": "%{count} Filialen mit deinen Artikeln"
+        }
+      },
+      "merchandise_unavailable_in_buyer_location": {
+        "remove_items_action": {
+          "many": "Entfernen Sie die nicht verfügbaren Artikel"
+        }
+      }
+    }
+  }
+}
