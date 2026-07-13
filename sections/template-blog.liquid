@@ -1,6 +1,8 @@
 {% paginate blog.articles by section.settings.number_of_articles %}
   <div class="template-article">
-    <h2 class="article-title">{{ blog.title }}</h2>
+    <h2 class="article-title">
+      {{ blog.title }}
+    </h2>
     {% for article in blog.articles %}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <a href="{{ article.url }}">

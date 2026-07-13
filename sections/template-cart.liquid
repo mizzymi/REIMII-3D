@@ -2,7 +2,7 @@
   <h2 class="article-comments-title">Carrito</h2>
   {% if cart.item_count > 0 %}
     <div class="cart-container">
-      <form action="/cart" method="post" novalidate class="cart-form">
+      <form id="cart-form" action="/cart" method="post" novalidate class="cart-form">
         <div class="cart-table-wrapper">
           <table class="cart-table">
             <thead>
@@ -89,29 +89,45 @@
           </table>
         </div>
 
+        <div class="flex flex-col mt-4">
+          <label for="cart-note" class="cart-note-label">Nota del pedido</label>
+          <textarea
+            name="note"
+            id="cart-note"
+            class="cart-note-input"
+            placeholder="Escribe una nota para tu pedido..."
+          >
+          </textarea>
+        </div>
+
         <div class="cart-summary">
-          <p class="cart-subtotal">
-            Subtotal
-            <strong>{{ cart.total_price | money }}</strong>
-          </p>
-
-          <div class="cart-actions">
-            <button
-              type="submit"
-              name="update"
-              class="cart-update-button"
-            >
-              Actualizar
-            </button>
-
-            <button
-              type="submit"
-              name="checkout"
-              class="cart-checkout-button"
-            >
-              Proceder al pago
-            </button>
-          </div>
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'subtotal' %}
+                <p class="cart-subtotal">
+                  Subtotal
+                  <strong>{{ cart.total_price | money }}</strong>
+                </p>
+              {% when 'update_button' %}
+                <div class="cart-actions">
+                  <button
+                    type="submit"
+                    name="update"
+                    class="cart-update-button"
+                  >
+                    Actualizar
+                  </button>
+              {% when 'checkout_button' %}
+                <button
+                  type="submit"
+                  name="checkout"
+                  class="cart-checkout-button"
+                >
+                  Proceder al pago
+                </button>
+                </div>
+            {% endcase %}
+          {% endfor %}
         </div>
       </form>
     </div>
@@ -122,3 +138,48 @@
     </div>
   {% endif %}
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const cartForm = document.getElementById('cart-form');
+
+    if (!cartForm) return;
+
+    const quantityInputs = cartForm.querySelectorAll('.cart-quantity-input');
+    let updateTimer;
+
+    quantityInputs.forEach(function (input) {
+      input.addEventListener('change', function () {
+        clearTimeout(updateTimer);
+
+        updateTimer = setTimeout(function () {
+          cartForm.classList.add('is-updating');
+          cartForm.submit();
+        }, 400);
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Carrito",
+  "blocks": [
+    {
+      "type": "subtotal",
+      "name": "Subtotal",
+      "limit": 1
+    },
+    {
+      "type": "checkout_button",
+      "name": "Botón de pago",
+      "limit": 1
+    },
+    {
+      "type": "update_button",
+      "name": "Botón de actualización",
+      "limit": 1
+    }
+  ]
+}
+{% endschema %}

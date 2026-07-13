@@ -1,0 +1,71 @@
+<section class="page-container">
+  <header class="page-header">
+    <h2 class="page-title">
+      {{ page.title }}
+    </h2>
+
+    {% if section.settings.show_divider %}
+      <span
+        class="page-header-divider"
+        aria-hidden="true"
+      ></span>
+    {% endif %}
+  </header>
+
+  {% if page.content != blank %}
+    <div class="page-content">
+      {{ page.content }}
+    </div>
+  {% elsif section.settings.show_empty_state %}
+    <div class="page-empty">
+      <h2>Esta página está vacía</h2>
+
+      <p>Todavía no se ha añadido contenido a esta página.</p>
+
+      {% if section.settings.empty_button_label != blank %}
+        <a
+          href="{{ routes.root_url }}"
+          class="reimii-button"
+        >
+          {{ section.settings.empty_button_label }}
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Página",
+  "tag": "section",
+  "class": "section-main-page",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Mostrar separador",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_empty_state",
+      "label": "Mostrar mensaje si la página está vacía",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "empty_button_label",
+      "label": "Texto del botón",
+      "default": "Volver al inicio"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Página"
+    }
+  ]
+}
+{% endschema %}

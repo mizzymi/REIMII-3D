@@ -1,0 +1,16 @@
+{
+  "name": "Collections page",
+  "sections": {
+    "page": {
+      "type": "template-page",
+      
+    },
+    "contact-form":{ 
+        "type": "contact-form"
+    }
+  },
+  "order": [
+    "page",
+    "contact-form"
+  ]
+}

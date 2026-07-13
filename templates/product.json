@@ -1,0 +1,26 @@
+{
+  "name": "Product",
+  "sections": {
+    "main": {
+      "type": "template-product",
+      "settings": {
+        "show_vendor": true,
+        "show_description": true,
+        "show_sku": true,
+        "show_inventory": true,
+        "low_stock_threshold": 5,
+        "show_badges": true,
+        "show_new_badge": true,
+        "new_product_days": 14,
+        "show_quantity": true,
+        "show_dynamic_checkout": true,
+        "enable_sticky_info": true,
+        "show_shipping_note": true,
+        "shipping_note": "<p>Cada pedido se prepara cuidadosamente antes de enviarse.</p>"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

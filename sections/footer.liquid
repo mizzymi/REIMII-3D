@@ -1,0 +1,345 @@
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a
+          href="{{ routes.root_url }}"
+          class="footer-logo-link"
+          aria-label="{{ shop.name | escape }}"
+        >
+          {% if section.settings.logo != blank %}
+            {{
+              section.settings.logo
+              | image_url: width: 500
+              | image_tag:
+                class: 'footer-logo',
+                loading: 'lazy',
+                widths: '160, 240, 320, 500',
+                sizes: '200px',
+                alt: shop.name
+            }}
+          {% else %}
+            <span class="footer-shop-name">
+              {{ shop.name }}
+            </span>
+          {% endif %}
+        </a>
+
+        {% if section.settings.description != blank %}
+          <div class="footer-description">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.show_socials %}
+          <div class="footer-socials">
+            {% if settings.social_instagram_link != blank %}
+              <a
+                href="{{ settings.social_instagram_link }}"
+                class="footer-social-link"
+                target="_blank"
+                rel="noopener"
+                aria-label="Instagram"
+              >
+                {% render 'icons-instagram' %}
+              </a>
+            {% endif %}
+
+            {% if settings.social_facebook_link != blank %}
+              <a
+                href="{{ settings.social_facebook_link }}"
+                class="footer-social-link"
+                target="_blank"
+                rel="noopener"
+                aria-label="Facebook"
+              >
+                {% render 'icons-facebook' %}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="footer-blocks">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'menu' %}
+              <div
+                class="footer-block footer-menu-block"
+                {{ block.shopify_attributes }}
+              >
+                {% if block.settings.heading != blank %}
+                  <h2 class="footer-heading">
+                    {{ block.settings.heading }}
+                  </h2>
+                {% endif %}
+
+                {% if block.settings.menu != blank %}
+                  <ul class="footer-menu" role="list">
+                    {% for link in block.settings.menu.links %}
+                      <li>
+                        <a
+                          href="{{ link.url }}"
+                          class="footer-menu-link"
+                          {% if link.current %}
+                            aria-current="page"
+                          {% endif %}
+                        >
+                          {{ link.title }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+
+            {% when 'newsletter' %}
+              <div
+                class="footer-block footer-newsletter"
+                {{ block.shopify_attributes }}
+              >
+                {% if block.settings.heading != blank %}
+                  <h2 class="footer-heading">
+                    {{ block.settings.heading }}
+                  </h2>
+                {% endif %}
+
+                {% if block.settings.text != blank %}
+                  <div class="footer-newsletter-text">
+                    {{ block.settings.text }}
+                  </div>
+                {% endif %}
+
+                {% form 'customer', class: 'footer-newsletter-form' %}
+                  <input
+                    type="hidden"
+                    name="contact[tags]"
+                    value="newsletter"
+                  >
+
+                  <div class="footer-newsletter-field">
+                    <label
+                      for="FooterEmail-{{ section.id }}"
+                      class="visually-hidden"
+                    >
+                      Correo electrónico
+                    </label>
+
+                    <input
+                      id="FooterEmail-{{ section.id }}"
+                      class="footer-newsletter-input"
+                      type="email"
+                      name="contact[email]"
+                      value="{{ form.email }}"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      autocomplete="email"
+                      placeholder="{{ block.settings.placeholder }}"
+                      required
+                    >
+
+                    <button
+                      type="submit"
+                      class="footer-newsletter-button"
+                      name="commit"
+                      aria-label="{{ block.settings.button_label | escape }}"
+                    >
+                      {{ block.settings.button_label }}
+                    </button>
+                  </div>
+
+                  {% if form.errors %}
+                    <div
+                      class="footer-form-message footer-form-message-error"
+                      role="alert"
+                    >
+                      {{ form.errors.translated_fields.email | capitalize }}
+                      {{ form.errors.messages.email }}
+                    </div>
+                  {% endif %}
+
+                  {% if form.posted_successfully? %}
+                    <p
+                      class="footer-form-message footer-form-message-success"
+                      tabindex="-1"
+                    >
+                      {{ block.settings.success_message }}
+                    </p>
+                  {% endif %}
+                {% endform %}
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p class="footer-copyright">
+          &copy; {{ 'now' | date: '%Y' }}
+          {{ shop.name | link_to: routes.root_url }}.
+          {{ section.settings.copyright_text }}
+        </p>
+
+        {% if section.settings.show_policy_links %}
+          <ul class="footer-policy-links" role="list">
+            {% for policy in shop.policies %}
+              {% if policy != blank %}
+                <li>
+                  <a href="{{ policy.url }}">
+                    {{ policy.title }}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      {% if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 %}
+        <ul
+          class="footer-payment-icons"
+          role="list"
+          aria-label="Métodos de pago"
+        >
+          {% for type in shop.enabled_payment_types %}
+            <li>
+              {{ type | payment_type_svg_tag: class: 'footer-payment-icon' }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "section",
+  "class": "section-footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Marca"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Descripción",
+      "default": "<p>Pequeños personajes impresos en 3D, llenos de color, movimiento y personalidad.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_socials",
+      "label": "Mostrar redes sociales",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Parte inferior"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Texto de copyright",
+      "default": "Todos los derechos reservados."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policy_links",
+      "label": "Mostrar enlaces legales",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Mostrar métodos de pago",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menú",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título",
+          "default": "Explora"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menú"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título",
+          "default": "Únete al universo Reimii"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texto",
+          "default": "<p>Recibe nuevos lanzamientos, personajes y pequeñas sorpresas.</p>"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Texto del campo",
+          "default": "Tu correo electrónico"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Texto del botón",
+          "default": "Unirme"
+        },
+        {
+          "type": "text",
+          "id": "success_message",
+          "label": "Mensaje de confirmación",
+          "default": "¡Gracias por unirte al universo Reimii!"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        {
+          "type": "menu",
+          "settings": {
+            "heading": "Explora"
+          }
+        },
+        {
+          "type": "menu",
+          "settings": {
+            "heading": "Ayuda"
+          }
+        },
+        {
+          "type": "newsletter"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

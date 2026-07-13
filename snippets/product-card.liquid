@@ -1,0 +1,81 @@
+<article class="collection-product">
+  <a
+    href="{{ product.url | within: collection }}"
+    class="collection-product-link"
+    aria-label="{{ product.title | escape }}"
+  >
+    <div class="collection-product-media">
+      {% if product.featured_image != blank %}
+        {{
+          product.featured_image
+          | image_url: width: 900
+          | image_tag:
+            class: 'collection-product-image',
+            loading: 'lazy',
+            widths: '320, 480, 640, 900',
+            sizes: '(max-width: 480px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw',
+            alt: product.featured_image.alt
+          | default: product.title
+        }}
+      {% else %}
+        <div class="collection-product-placeholder">
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-image' }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.show_sold_out_badge %}
+        {% unless product.available %}
+          <span class="collection-product-badge collection-product-badge-sold-out"> Agotado </span>
+        {% endunless %}
+      {% endif %}
+
+      {% if section.settings.show_sale_badge %}
+        {% if product.compare_at_price > product.price and product.available %}
+          <span class="collection-product-badge collection-product-badge-sale"> Oferta </span>
+        {% endif %}
+      {% endif %}
+
+      {% if section.settings.show_new_badge %}
+        {% assign now = 'now' | date: '%s' %}
+        {% assign published = product.published_at | date: '%s' %}
+        {% assign days_since = now | minus: published | divided_by: 86400 %}
+
+        {% if days_since <= section.settings.new_product_days %}
+          <span class="collection-product-badge collection-product-badge-new"> Nuevo </span>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="collection-product-content">
+      {% if section.settings.show_vendor and product.vendor != blank %}
+        <span class="collection-product-vendor">
+          {{ product.vendor }}
+        </span>
+      {% endif %}
+
+      <h3 class="collection-product-title">
+        {{ product.title }}
+      </h3>
+
+      <div class="collection-product-price">
+        {% if product.price_varies %}
+          <span class="collection-product-price-prefix"> Desde </span>
+
+          <span class="collection-product-current-price">
+            {{ product.price_min | money }}
+          </span>
+        {% else %}
+          <span class="collection-product-current-price">
+            {{ product.price | money }}
+          </span>
+        {% endif %}
+
+        {% if product.compare_at_price_max > product.price_min %}
+          <span class="collection-product-compare-price">
+            {{ product.compare_at_price_max | money }}
+          </span>
+        {% endif %}
+      </div>
+    </div>
+  </a>
+</article>

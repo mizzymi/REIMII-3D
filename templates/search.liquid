@@ -1,22 +1,255 @@
-{% paginate search.results by 10 %}
-  <form action="/search" method="get" role="search">
-    <input type="search" name="q" value="{{ search.terms | escape }}">
-    <button type="submit">search</button>
-  </form>
+<section class="reimii-search">
+  <div class="reimii-search__container">
+    <header class="reimii-search__header">
+      <p class="reimii-search__eyebrow">Encuentra tu favorito</p>
 
-  {% if search.performed %}
-    {% for item in search.results %}
-      {% if item.featured_image %}
-        <a href="{{ item.url | within: collection }}" title="{{ item.title | escape }}">
-          {{ item.featured_image.src | img_url: 'medium' | img_tag: item.featured_image.alt }}
-        </a>
+      <h1 class="reimii-search__title">
+        {% if search.performed %}
+          Resultados de búsqueda
+        {% else %}
+          ¿Qué estás buscando?
+        {% endif %}
+      </h1>
+
+      <p class="reimii-search__intro">Busca productos, colecciones y contenido de REIMII 3D Shop.</p>
+
+      <form
+        class="reimii-search__form"
+        action="{{ routes.search_url }}"
+        method="get"
+        role="search"
+      >
+        <div class="reimii-search__field">
+          <span class="reimii-search__icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </span>
+
+          <input
+            class="reimii-search__input"
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="Buscar productos, animales, colecciones..."
+            aria-label="Buscar"
+            autocomplete="off"
+          >
+
+          <input type="hidden" name="options[prefix]" value="last">
+
+          <button class="reimii-search__button" type="submit">Buscar</button>
+        </div>
+      </form>
+
+      {% if search.performed %}
+        <div class="reimii-search__summary">
+          {% if search.results_count > 0 %}
+            <span>
+              {{ search.results_count }}
+              {% if search.results_count == 1 %}
+                resultado
+              {% else %}
+                resultados
+              {% endif %}
+              para
+              <strong>“{{ search.terms | escape }}”</strong>
+            </span>
+          {% else %}
+            <span>
+              No hemos encontrado resultados para
+              <strong>“{{ search.terms | escape }}”</strong>
+            </span>
+          {% endif %}
+        </div>
       {% endif %}
-      <h5>{{ item.title | link_to: item.url }}</h5>
-      <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
-    {% else %}
-      no results
-    {% endfor %}
-  {% endif %}
+    </header>
 
-  {% if paginate.pages > 1 %}{{ paginate | default_pagination }}{% endif %}
-{% endpaginate %}
+    {% if search.performed %}
+      {% paginate search.results by 24 %}
+        {% if search.results_count > 0 %}
+          <div class="reimii-search__results">
+            {% for result in search.results %}
+              {% liquid
+                assign result_image = blank
+
+                if result.object_type == 'product'
+                  assign result_image = result.featured_image
+                elsif result.object_type == 'article'
+                  assign result_image = result.image
+                elsif result.object_type == 'collection'
+                  assign result_image = result.featured_image
+                endif
+              %}
+
+              <article class="reimii-search-card reimii-search-card--{{ result.object_type }}">
+                <a
+                  class="reimii-search-card__link"
+                  href="{{ result.url }}"
+                >
+                  <div class="reimii-search-card__media">
+                    {% if result_image %}
+                      {{
+                        result_image
+                        | image_url: width: 800
+                        | image_tag:
+                          class: 'reimii-search-card__image',
+                          loading: 'lazy',
+                          widths: '320, 480, 640, 800',
+                          sizes: '(max-width: 480px) 50vw, (max-width: 1024px) 33vw, 25vw',
+                          alt: result.title
+                      }}
+                    {% else %}
+                      <div class="reimii-search-card__placeholder">
+                        {% case result.object_type %}
+                          {% when 'product' %}
+                            <span>🧸</span>
+                          {% when 'collection' %}
+                            <span>✨</span>
+                          {% when 'article' %}
+                            <span>📝</span>
+                          {% else %}
+                            <span>🔎</span>
+                        {% endcase %}
+                      </div>
+                    {% endif %}
+
+                    <span class="reimii-search-card__type">
+                      {% case result.object_type %}
+                        {% when 'product' %}
+                          Producto
+                        {% when 'collection' %}
+                          Colección
+                        {% when 'article' %}
+                          Artículo
+                        {% when 'page' %}
+                          Página
+                        {% else %}
+                          Resultado
+                      {% endcase %}
+                    </span>
+
+                    {% if result.object_type == 'product' %}
+                      {% unless result.available %}
+                        <span class="reimii-search-card__badge reimii-search-card__badge--sold-out"> Agotado </span>
+                      {% endunless %}
+
+                      {% if result.compare_at_price > result.price %}
+                        <span class="reimii-search-card__badge reimii-search-card__badge--sale"> Oferta </span>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+
+                  <div class="reimii-search-card__content">
+                    {% if result.object_type == 'product' and result.vendor != blank %}
+                      <p class="reimii-search-card__vendor">
+                        {{ result.vendor }}
+                      </p>
+                    {% endif %}
+
+                    <h2 class="reimii-search-card__title">
+                      {{ result.title }}
+                    </h2>
+
+                    {% if result.object_type == 'product' %}
+                      <div class="reimii-search-card__price">
+                        {% if result.price_varies %}
+                          <span class="reimii-search-card__price-prefix"> Desde </span>
+                        {% endif %}
+
+                        <span class="reimii-search-card__current-price">
+                          {{ result.price | money }}
+                        </span>
+
+                        {% if result.compare_at_price > result.price %}
+                          <s class="reimii-search-card__compare-price">
+                            {{ result.compare_at_price | money }}
+                          </s>
+                        {% endif %}
+                      </div>
+                    {% else %}
+                      {% if result.content != blank %}
+                        <div class="reimii-search-card__excerpt">
+                          {{ result.content | strip_html | truncatewords: 18 }}
+                        </div>
+                      {% endif %}
+
+                      <span class="reimii-search-card__read-more">
+                        Ver más
+                        <span aria-hidden="true">→</span>
+                      </span>
+                    {% endif %}
+                  </div>
+                </a>
+              </article>
+            {% endfor %}
+          </div>
+
+          {% if paginate.pages > 1 %}
+            <nav
+              class="reimii-search__pagination"
+              aria-label="Paginación de resultados"
+            >
+              {{ paginate | default_pagination }}
+            </nav>
+          {% endif %}
+        {% else %}
+          <div class="reimii-search-empty">
+            <div class="reimii-search-empty__icon">{% render 'icons-serching' %}</div>
+
+            <h2>No encontramos lo que buscabas</h2>
+
+            <p>Prueba con una palabra más general, revisa la ortografía o explora nuestras colecciones.</p>
+
+            <div class="reimii-search-empty__suggestions">
+              <span>Prueba buscando:</span>
+
+              <div>
+                <a href="{{ routes.search_url }}?q=Fluffy+Mascots"> Fluffy Mascots </a>
+
+                <a href="{{ routes.search_url }}?q=Dragón"> Dragón </a>
+
+                <a href="{{ routes.search_url }}?q=Llavero"> Llavero </a>
+
+                <a href="{{ routes.search_url }}?q=Cute"> Cute </a>
+              </div>
+            </div>
+
+            <a
+              class="reimii-button reimii-search-empty__button"
+              href="{{ routes.all_products_collection_url }}"
+            >
+              Ver todos los productos
+            </a>
+          </div>
+        {% endif %}
+      {% endpaginate %}
+    {% else %}
+      <div class="reimii-search-start">
+        <div class="reimii-search-start__icon">✨</div>
+
+        <h2>Descubre el universo REIMII</h2>
+
+        <p>Busca por animal, colección, color o tipo de producto para encontrar a tu nuevo compañero favorito.</p>
+
+        <div class="reimii-search-start__links">
+          <a href="{{ routes.search_url }}?q=Fluffy+Mascots"> Fluffy Mascots </a>
+
+          <a href="{{ routes.search_url }}?q=Dragón"> Dragones </a>
+
+          <a href="{{ routes.search_url }}?q=Llavero"> Llaveros </a>
+
+          <a href="{{ routes.search_url }}?q=Articulado"> Articulados </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>

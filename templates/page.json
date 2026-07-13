@@ -1,0 +1,12 @@
+{
+  "name": "Collections page",
+  "sections": {
+    "page": {
+      "type": "template-page",
+      
+    }
+  },
+  "order": [
+    "page"
+  ]
+}

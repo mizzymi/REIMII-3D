@@ -1,0 +1,215 @@
+<section class="collection-container">
+  <header class="collection-header">
+    <div class="collection-heading">
+      {% if section.settings.heading_image != blank %}
+        {{
+          section.settings.heading_image
+          | image_url: width: 900
+          | image_tag:
+            class: 'collection-image',
+            loading: 'eager',
+            widths: '240, 320, 480, 640, 900',
+            sizes: '(max-width: 480px) 88px, (max-width: 768px) 120px, 160px',
+            alt: section.settings.heading
+        }}
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h2 class="collection-title">
+          {{ section.settings.heading }}
+        </h2>
+      {% endif %}
+    </div>
+
+    {% if section.settings.description != blank %}
+      <div class="collection-description">
+        {{ section.settings.description }}
+      </div>
+    {% endif %}
+
+    {% if section.settings.show_collection_count %}
+      <p class="collection-count">
+        {{ collections.size }}
+
+        {% if collections.size == 1 %}
+          colección
+        {% else %}
+          colecciones
+        {% endif %}
+      </p>
+    {% endif %}
+  </header>
+
+  {% paginate collections by section.settings.collections_per_page %}
+    {% if collections.size > 0 %}
+      <div class="collection-grid">
+        {% for collection_item in collections %}
+          {% unless collection_item.handle == 'frontpage' %}
+            {% liquid
+              assign collection_image = collection_item.featured_image
+
+              if collection_image == blank
+                assign collection_image = collection_item.products.first.featured_image
+              endif
+            %}
+
+            <article class="collection-product collection-list-card">
+              <a
+                href="{{ collection_item.url }}"
+                class="collection-product-link"
+                aria-label="{{ collection_item.title | escape }}"
+              >
+                <div class="collection-product-media">
+                  {% if collection_image != blank %}
+                    {{
+                      collection_image
+                      | image_url: width: 900
+                      | image_tag:
+                        class: 'collection-product-image',
+                        loading: 'lazy',
+                        widths: '320, 480, 640, 900',
+                        sizes: '(max-width: 480px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw',
+                        alt: collection_item.title
+                    }}
+                  {% else %}
+                    <div class="collection-product-placeholder">
+                      {{ 'collection-1' | placeholder_svg_tag: 'placeholder-image' }}
+                    </div>
+                  {% endif %}
+
+                  {% if section.settings.show_product_count %}
+                    <span class="collection-list-count">
+                      {{ collection_item.products_count }}
+
+                      {% if collection_item.products_count == 1 %}
+                        producto
+                      {% else %}
+                        productos
+                      {% endif %}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <div class="collection-product-content">
+                  <h3 class="collection-product-title">
+                    {{ collection_item.title }}
+                  </h3>
+
+                  {% if section.settings.show_descriptions and collection_item.description != blank %}
+                    <div class="collection-list-description">
+                      {{ collection_item.description | strip_html | truncatewords: 18 }}
+                    </div>
+                  {% endif %}
+
+                  {% if section.settings.show_link %}
+                    <span class="collection-list-link">
+                      {{ section.settings.link_label }}
+                      <span aria-hidden="true">→</span>
+                    </span>
+                  {% endif %}
+                </div>
+              </a>
+            </article>
+          {% endunless %}
+        {% endfor %}
+      </div>
+
+      {% render 'pagination', paginate: paginate %}
+    {% else %}
+      <div class="collection-empty">
+        <h2>No hay colecciones</h2>
+
+        <p>Todavía no hemos creado ninguna colección.</p>
+
+        <a
+          href="{{ routes.all_products_collection_url }}"
+          class="reimii-button"
+        >
+          Ver todos los productos
+        </a>
+      </div>
+    {% endif %}
+  {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "Lista de colecciones",
+  "tag": "section",
+  "class": "section-collection-list",
+  "enabled_on": {
+    "templates": ["list-collections"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cabecera"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_image",
+      "label": "Imagen de la cabecera"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Explora nuestras colecciones"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Descripción",
+      "default": "<p>Descubre todos los personajes y universos de Reimii.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_count",
+      "label": "Mostrar número de colecciones",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Tarjetas de colección"
+    },
+    {
+      "type": "range",
+      "id": "collections_per_page",
+      "label": "Colecciones por página",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Mostrar número de productos",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_descriptions",
+      "label": "Mostrar descripción",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_link",
+      "label": "Mostrar enlace",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Texto del enlace",
+      "default": "Explorar colección"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lista de colecciones"
+    }
+  ]
+}
+{% endschema %}

@@ -3,21 +3,7 @@
     {% case block.type %}
       {% when 'article_title' %}
         <h2 class="article-title text-reimii" itemprop="headline">
-          {{
-            article.title
-            | replace: 'á', 'a'
-            | replace: 'é', 'e'
-            | replace: 'í', 'i'
-            | replace: 'ó', 'o'
-            | replace: 'ú', 'u'
-            | replace: 'Á', 'A'
-            | replace: 'É', 'E'
-            | replace: 'Í', 'I'
-            | replace: 'Ó', 'O'
-            | replace: 'Ú', 'U'
-            | replace: 'ñ', 'n'
-            | replace: 'Ñ', 'N'
-          }}
+          {{ article.title }}
         </h2>
       {% when 'article_author' %}
         {% if section.settings.show_author %}

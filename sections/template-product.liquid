@@ -1,0 +1,267 @@
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<section class="reimii-product">
+  <div class="reimii-product__left">
+    <div class="reimii-gallery">
+      <button class="reimii-gallery-arrow prev" type="button">←</button>
+
+      <div class="reimii-product__gallery" id="gallery">
+        {% for image in product.images %}
+          {{
+            image
+            | image_url: width: 1200
+            | image_tag:
+              class: 'reimii-product__image',
+              loading: 'lazy',
+              data-media-id: image.id,
+              data-index: forloop.index0
+          }}
+        {% endfor %}
+      </div>
+
+      <button class="reimii-gallery-arrow next" type="button">→</button>
+    </div>
+    <div class="reimii-product__description-desktop">
+      {{ product.description }}
+    </div>
+  </div>
+
+  <div class="reimii-product__info">
+    <p class="reimii-product__kicker">REIMII 3D Shop</p>
+    <h1>{{ product.title }}</h1>
+
+    <div class="reimii-product__price" data-product-price>
+      {% if current_variant.compare_at_price > current_variant.price %}
+        <span>{{ current_variant.price | money }}</span>
+        <s>{{ current_variant.compare_at_price | money }}</s>
+      {% else %}
+        <span>{{ current_variant.price | money }}</span>
+      {% endif %}
+    </div>
+
+    <div class="reimii-product__trust">
+      <span>Fabricado en España</span>
+      <span>Impresión 3D premium</span>
+      <span>Ideal para regalar</span>
+      <span>Pago seguro</span>
+    </div>
+
+    <div class="reimii-product__form" data-reimii-product-form>
+      {% form 'product', product %}
+        <input
+          type="hidden"
+          name="id"
+          value="{{ current_variant.id }}"
+          data-variant-id
+        >
+
+        {% unless product.has_only_default_variant %}
+          <div class="reimii-variant-groups">
+            {% for option in product.options_with_values %}
+              <div class="reimii-option-group">
+                <div class="reimii-option-header">
+                  <span>{{ option.name }}</span>
+                  <strong data-selected-option="{{ option.position }}">
+                    {{ option.selected_value }}
+                  </strong>
+                </div>
+
+                <div class="reimii-option-values">
+                  {% for value in option.values %}
+                    <button
+                      type="button"
+                      class="reimii-option {% if option.selected_value == value %}is-active{% endif %}"
+                      data-option-position="{{ option.position }}"
+                      data-option-value="{{ value | escape }}"
+                    >
+                      {{ value }}
+                    </button>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endunless %}
+
+        <input class="reimii-product__quantity" type="number" name="quantity" min="1" value="1">
+
+        <button class="reimii-product__submit" type="submit">Añadir al carrito</button>
+
+        <div class="reimii-shop-pay">
+          {{ form | payment_button }}
+        </div>
+
+        <script type="application/json" data-product-json>
+          {{ product.variants | json }}
+        </script>
+      {% endform %}
+    </div>
+
+    <div class="reimii-product__accordions">
+      <details open>
+        <summary>Producción y envío</summary>
+        <p>
+          Todos los productos se fabrican o preparan bajo pedido. El tiempo de producción habitual es de 1 a 6 días
+          laborables, y el envío suele tardar entre 2 y 10 días laborables según destino y transportista.
+        </p>
+      </details>
+
+      <details>
+        <summary>Material</summary>
+        <p>
+          Fabricado mediante impresión 3D con materiales ligeros y resistentes, ideal para uso diario y coleccionismo.
+        </p>
+      </details>
+
+      <details>
+        <summary>Diseños y licencias</summary>
+        <p>REIMII trabaja con diseños propios y modelos de artistas autorizados con derecho de venta.</p>
+      </details>
+    </div>
+  </div>
+  <div class="reimii-product__description-mobile">
+    {{ product.description }}
+  </div>
+</section>
+
+<div class="reimii-sticky-atc">
+  <div>
+    <strong>{{ product.title }}</strong>
+    <span data-sticky-price>{{ current_variant.price | money }}</span>
+  </div>
+
+  {% form 'product', product %}
+    <input type="hidden" name="id" value="{{ current_variant.id }}" data-sticky-variant-id>
+    <input type="hidden" name="quantity" value="1">
+    <button type="submit">Añadir</button>
+  {% endform %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // VARIANTES + PRECIO + STICKY ATC
+    document.querySelectorAll('[data-reimii-product-form]').forEach((formWrapper) => {
+      const productJson = formWrapper.querySelector('[data-product-json]');
+      const variantInput = formWrapper.querySelector('[data-variant-id]');
+      const buttons = formWrapper.querySelectorAll('[data-option-position]');
+      const priceBox = document.querySelector('[data-product-price]');
+      const stickyVariantInput = document.querySelector('[data-sticky-variant-id]');
+      const stickyPrice = document.querySelector('[data-sticky-price]');
+
+      if (!productJson || !variantInput) return;
+
+      const variants = JSON.parse(productJson.textContent);
+      const selected = {};
+
+      const formatMoney = (cents) => {
+        return new Intl.NumberFormat('es-ES', {
+          style: 'currency',
+          currency: '{{ cart.currency.iso_code }}',
+        }).format(cents / 100);
+      };
+
+      buttons.forEach((button) => {
+        if (button.classList.contains('is-active')) {
+          selected[button.dataset.optionPosition] = button.dataset.optionValue;
+        }
+
+        button.addEventListener('click', () => {
+          const position = button.dataset.optionPosition;
+          const value = button.dataset.optionValue;
+
+          selected[position] = value;
+
+          formWrapper
+            .querySelectorAll(`[data-option-position="${position}"]`)
+            .forEach((btn) => btn.classList.remove('is-active'));
+
+          button.classList.add('is-active');
+
+          const label = formWrapper.querySelector(`[data-selected-option="${position}"]`);
+          if (label) label.textContent = value;
+
+          const matchedVariant = variants.find((variant) => {
+            return variant.options.every((optionValue, index) => {
+              return selected[index + 1] === optionValue;
+            });
+          });
+
+          if (!matchedVariant) return;
+
+          variantInput.value = matchedVariant.id;
+
+          // Cambiar imagen al seleccionar variante
+          if (matchedVariant.featured_image) {
+            const mediaId = matchedVariant.featured_image.id;
+
+            const image = gallery?.querySelector(`[data-media-id="${mediaId}"]`);
+
+            if (image) {
+              gallery.scrollTo({
+                left: image.offsetLeft,
+                behavior: 'smooth',
+              });
+            }
+          }
+
+          if (stickyVariantInput) {
+            stickyVariantInput.value = matchedVariant.id;
+          }
+
+          if (priceBox) {
+            if (matchedVariant.compare_at_price && matchedVariant.compare_at_price > matchedVariant.price) {
+              priceBox.innerHTML = `
+                <span>${formatMoney(matchedVariant.price)}</span>
+                <s>${formatMoney(matchedVariant.compare_at_price)}</s>
+              `;
+            } else {
+              priceBox.innerHTML = `<span>${formatMoney(matchedVariant.price)}</span>`;
+            }
+          }
+
+          if (stickyPrice) {
+            stickyPrice.textContent = formatMoney(matchedVariant.price);
+          }
+        });
+      });
+    });
+
+    // GALERÍA CON FLECHAS
+    const gallery = document.querySelector('.reimii-product__gallery');
+    const prevButton = document.querySelector('.reimii-gallery-arrow.prev');
+    const nextButton = document.querySelector('.reimii-gallery-arrow.next');
+
+    if (gallery && prevButton && nextButton) {
+      const getSlideWidth = () => {
+        const slide = gallery.querySelector('.reimii-product__image');
+        if (!slide) return gallery.clientWidth;
+        const gap = parseInt(getComputedStyle(gallery).gap || 0, 10);
+        return slide.getBoundingClientRect().width + gap;
+      };
+
+      nextButton.addEventListener('click', () => {
+        gallery.scrollBy({
+          left: getSlideWidth(),
+          behavior: 'smooth',
+        });
+      });
+
+      prevButton.addEventListener('click', () => {
+        gallery.scrollBy({
+          left: -getSlideWidth(),
+          behavior: 'smooth',
+        });
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

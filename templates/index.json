@@ -1,0 +1,54 @@
+{
+  "name": "Index",
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Bienvenido a Reimii",
+        "heading": "Colecciona momentos adorables",
+        "text": "<p>Descubre figuras articuladas impresas en 3D, llenas de color y personalidad.</p>",
+        "button_label": "Ver la tienda",
+        "button_link": "shopify://collections/all",
+        "secondary_button_label": "Explorar colecciones",
+        "secondary_button_link": "shopify://collections"
+      }
+    },
+
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "featured_collection": "all",
+        "heading": "Nuestros favoritos",
+        "products_to_show": 8,
+        "show_vendor": false,
+        "show_sale_badge": true,
+        "show_sold_out_badge": true,
+        "show_new_badge": true
+      }
+    },
+
+    "shop-benefits": {
+      "type": "shop-benefits",
+      "settings": {
+        "heading": "Hecho para sacarte una sonrisa"
+      }
+    },
+
+    "brand-story": {
+      "type": "brand-story",
+      "settings": {
+        "heading": "Bienvenido a Reimii",
+        "text": "<p>Creamos pequeños personajes impresos en 3D para acompañarte, decorar tu espacio y convertir cada regalo en algo especial.</p>",
+        "button_label": "Conoce nuestra historia",
+        "button_link": "shopify://pages/about"
+      }
+    }
+  },
+
+  "order": [
+    "hero",
+    "featured-collection",
+    "shop-benefits",
+    "brand-story"
+  ]
+}

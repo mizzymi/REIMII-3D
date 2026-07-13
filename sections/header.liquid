@@ -1,10 +1,9 @@
 {% assign main_manu_linklist = linklists[section.settings.main_menu] %}
 
 <div class="relative bg-reimii-black" x-data="{ mobileMenuOpen: false }">
-  <div class="mx-auto px-4 sm:px-6">
-    <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
-      <!-- STORE LOGO -->
-      <div class="flex justify-start lg:flex-1 truncate">
+  <div class="mx-auto p-4 sm:px-6">
+    <div class="flex justify-between md:hidden">
+      <div class="flex justify-start min-w-0">
         <a href="{{ routes.root_url }}" class="inline-flex items-center">
           {% if section.settings.logo != blank %}
             {{
@@ -14,30 +13,44 @@
             }}
           {% else %}
             <span class="text-reimii-white text-xl font-reimii-display">
-              {{ shop.name }}
+              {{
+                shop.name
+                | replace: 'á', 'a'
+                | replace: 'é', 'e'
+                | replace: 'í', 'i'
+                | replace: 'ó', 'o'
+                | replace: 'ú', 'u'
+                | replace: 'Á', 'A'
+                | replace: 'É', 'E'
+                | replace: 'Í', 'I'
+                | replace: 'Ó', 'O'
+                | replace: 'Ú', 'U'
+                | replace: 'ñ', 'n'
+                | replace: 'Ñ', 'N'
+              }}
             </span>
           {% endif %}
         </a>
       </div>
-      <div class="flex items-center justify-end md:flex-1 lg:w-0">
-        <a
-          href="{{ routes.cart_url }}"
-          class="whitespace-nowrap text-reimii-white hover:text-reimii-pink"
-          aria-label="Carrito"
-        >
-          {% if section.settings.cart_icon != blank %}
-            {{
-              section.settings.cart_icon
-              | image_url: width: section.settings.cart_icon_width
-              | image_tag: alt: 'Carrito', width: section.settings.cart_icon_width, class: 'h-auto'
-            }}
-          {% else %}
-            {% render 'icons-shopping-cart' %}
-          {% endif %}
-        </a>
 
-        <!-- MOBILE MENU BUTTON -->
-        <div class="-mr-2 -my-2 ml-3 md:hidden">
+      <!-- MOBILE MENU BUTTON -->
+      <div class="-mr-2 -my-2 ml-3">
+        <div class="flex items-center justify-end">
+          <a
+            href="{{ routes.cart_url }}"
+            class="whitespace-nowrap text-reimii-white hover:text-reimii-pink"
+            aria-label="Carrito"
+          >
+            {% if section.settings.cart_icon != blank %}
+              {{
+                section.settings.cart_icon
+                | image_url: width: section.settings.cart_icon_width
+                | image_tag: alt: 'Carrito', width: section.settings.cart_icon_width, class: 'h-auto'
+              }}
+            {% else %}
+              {% render 'icons-shopping-cart' %}
+            {% endif %}
+          </a>
           <button
             type="button"
             class="p-2 inline-flex items-center justify-center focus:outline-none"
@@ -224,9 +237,27 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="hidden md:grid md:grid-cols-[1fr_auto_1fr] items-center gap-8 w-full">
+      <!-- LOGO -->
+      <div class="flex justify-start min-w-0">
+        <a href="{{ routes.root_url }}" class="inline-flex items-center">
+          {% if section.settings.logo != blank %}
+            {{
+              section.settings.logo
+              | image_url: width: section.settings.logo_width
+              | image_tag: alt: shop.name, width: section.settings.logo_width, class: 'logo h-auto'
+            }}
+          {% else %}
+            <span class="text-reimii-white text-xl font-reimii-display">
+              {{ shop.name }}
+            </span>
+          {% endif %}
+        </a>
+      </div>
 
       <!-- DESKTOP NAVIGATION -->
-      <nav class="hidden md:flex space-x-10">
+      <nav class="flex justify-center items-center space-x-10 whitespace-nowrap">
         {% for link in main_manu_linklist.links %}
           {% if link.links != blank %}
             <div
@@ -262,7 +293,7 @@
                 x-cloak
                 @click.away="open = false"
                 @keydown.escape.window="open = false"
-                class="absolute z-50 -ml-5 mt-5 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                class="absolute z-50 -ml-5 mt-4 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
               >
                 <div class="shadow-lg border ring-black ring-opacity-5 overflow-hidden rounded-lg">
                   <div class="relative grid gap-6 bg-reimii-white px-5 py-6 sm:gap-8 sm:p-8">
@@ -297,7 +328,7 @@
       </nav>
 
       <!-- DESKTOP ACTIONS -->
-      <div class="hidden md:flex items-center justify-end md:flex-1 space-x-5">
+      <div class="flex justify-end items-center space-x-5">
         <a
           href="{{ routes.cart_url }}"
           class="whitespace-nowrap text-reimii-white hover:text-reimii-pink"

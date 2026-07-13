@@ -1,0 +1,143 @@
+<section class="collection-container">
+  <header class="collection-header">
+    <div class="collection-heading">
+      {% if section.settings.show_collection_image and collection.featured_image != blank %}
+        {{
+          collection.featured_image
+          | image_url: width: 900
+          | image_tag:
+            class: 'collection-image',
+            loading: 'eager',
+            widths: '240, 320, 480, 640, 900',
+            sizes: '(max-width: 480px) 88px, (max-width: 768px) 120px, 160px',
+            alt: collection.featured_image.alt
+          | default: collection.title
+        }}
+      {% endif %}
+
+      <h2 class="collection-title">
+        {{ collection.title }}
+      </h2>
+    </div>
+
+    {% if section.settings.show_description and collection.description != blank %}
+      <div class="collection-description">
+        {{ collection.description }}
+      </div>
+    {% endif %}
+
+    {% if section.settings.show_product_count %}
+      <p class="collection-count">
+        {{ collection.products_count }}
+        {% if collection.products_count == 1 %}
+          producto
+        {% else %}
+          productos
+        {% endif %}
+      </p>
+    {% endif %}
+  </header>
+
+  {% paginate collection.products by 12 %}
+    {% if collection.products_count > 0 %}
+      <div class="collection-grid">
+        {% for product in collection.products %}
+          {% render 'product-card' | product: product %}
+        {% endfor %}
+      </div>
+
+      {% render 'pagination', paginate: paginate %}
+    {% else %}
+      <div class="collection-empty">
+        <h2>No hay productos</h2>
+
+        <p>No hemos encontrado productos en esta colección.</p>
+
+        <a
+          href="{{ routes.all_products_collection_url }}"
+          class="reimii-button"
+        >
+          Ver todos los productos
+        </a>
+      </div>
+    {% endif %}
+  {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "Colección de productos",
+  "tag": "section",
+  "class": "section-collection",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cabecera de la colección"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Mostrar imagen de la colección",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Mostrar descripción",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Mostrar número de productos",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Tarjetas de producto"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Mostrar vendedor",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sale_badge",
+      "label": "Mostrar etiqueta de oferta",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sold_out_badge",
+      "label": "Mostrar etiqueta de agotado",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_new_badge",
+      "label": "Mostrar etiqueta de nuevo",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "new_product_days",
+      "label": "Días que un producto se considera nuevo",
+      "min": 1,
+      "max": 60,
+      "step": 1,
+      "default": 14,
+      "unit": "d"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Colección de productos"
+    }
+  ]
+}
+{% endschema %}
