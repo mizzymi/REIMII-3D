@@ -30,6 +30,13 @@
       "footer": {
         "type": "footer",
         "blocks": {
+          "menu_69CPkp": {
+            "type": "menu",
+            "settings": {
+              "heading": "Explora",
+              "menu": "footer"
+            }
+          },
           "newsletter_wdRHyf": {
             "type": "newsletter",
             "settings": {
@@ -39,18 +46,11 @@
               "button_label": "Unirme",
               "success_message": "¡Gracias por unirte al universo Reimii!"
             }
-          },
-          "menu_69CPkp": {
-            "type": "menu",
-            "settings": {
-              "heading": "Explora",
-              "menu": "footer"
-            }
           }
         },
         "block_order": [
-          "newsletter_wdRHyf",
-          "menu_69CPkp"
+          "menu_69CPkp",
+          "newsletter_wdRHyf"
         ],
         "settings": {
           "description": "<p>Pequeños personajes impresos en 3D, llenos de color, movimiento y personalidad.</p>",
