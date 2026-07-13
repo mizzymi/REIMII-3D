@@ -16,7 +16,7 @@
         "description": "<p>Descubre todos los personajes y universos de Reimii.</p>",
         "show_collection_count": true,
         "collections_per_page": 12,
-        "show_product_count": false,
+        "show_product_count": true,
         "show_descriptions": false,
         "show_link": true,
         "link_label": "Explorar colección"
