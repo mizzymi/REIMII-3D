@@ -83,9 +83,55 @@
           </div>
         {% endunless %}
 
-        <input class="reimii-product__quantity" type="number" name="quantity" min="1" value="1">
+        <div class="reimii-product-quantity">
+          <label
+            for="ProductQuantity-{{ section.id }}"
+            class="reimii-product-quantity__label"
+          >
+            Cantidad
+          </label>
 
-        <button class="reimii-product__submit" type="submit">Añadir al carrito</button>
+          <div class="reimii-quantity-selector">
+            <button
+              type="button"
+              class="reimii-quantity-selector__button"
+              data-quantity-minus
+              aria-label="Reducir cantidad"
+            >
+              −
+            </button>
+
+            <input
+              id="ProductQuantity-{{ section.id }}"
+              class="reimii-quantity-selector__input"
+              type="number"
+              name="quantity"
+              value="1"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              data-quantity-input
+            >
+
+            <button
+              type="button"
+              class="reimii-quantity-selector__button"
+              data-quantity-plus
+              aria-label="Aumentar cantidad"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="reimii-product__add-button"
+          data-add-to-cart
+          data-default-text="Añadir al carrito"
+        >
+          <span data-add-to-cart-text>Añadir al carrito</span>
+        </button>
 
         <div class="reimii-shop-pay">
           {{ form | payment_button }}
@@ -130,10 +176,25 @@
     <span data-sticky-price>{{ current_variant.price | money }}</span>
   </div>
 
-  {% form 'product', product %}
-    <input type="hidden" name="id" value="{{ current_variant.id }}" data-sticky-variant-id>
-    <input type="hidden" name="quantity" value="1">
-    <button type="submit">Añadir</button>
+  {% form 'product', product, class: 'reimii-sticky-atc__form' %}
+    <input
+      type="number"
+      name="quantity"
+      value="1"
+      min="1"
+      step="1"
+      hidden
+      data-sticky-quantity
+    >
+
+    <button
+      type="submit"
+      class="reimii-sticky-atc__button"
+      data-add-to-cart
+      data-default-text="Añadir al carrito"
+    >
+      <span data-add-to-cart-text>Añadir al carrito</span>
+    </button>
   {% endform %}
 </div>
 
@@ -258,62 +319,168 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const productForms = document.querySelectorAll(
-      '.reimii-product__form form[action*="/cart/add"], .reimii-sticky-atc form[action*="/cart/add"]'
-    );
+    const section = document.getElementById('shopify-section-{{ section.id }}');
 
-    const updateCartCount = async () => {
-      try {
-        const response = await fetch(`${window.Shopify.routes.root}cart.js`, {
-          headers: {
-            Accept: 'application/json',
-          },
-        });
+    if (!section) return;
 
-        if (!response.ok) return;
+    const productForms = section.querySelectorAll('form[action*="/cart/add"]');
 
-        const cart = await response.json();
+    const quantityInput = section.querySelector('[data-quantity-input]');
 
-        document
-          .querySelectorAll('[data-cart-count], .cart-count, .header-cart-count, .reimii-cart-count')
-          .forEach((counter) => {
-            counter.textContent = cart.item_count;
-            counter.hidden = cart.item_count === 0;
-          });
+    const stickyQuantityInputs = section.querySelectorAll('[data-sticky-quantity]');
 
-        document.dispatchEvent(
-          new CustomEvent('reimii:cart-updated', {
-            detail: { cart },
-          })
-        );
-      } catch (error) {
-        console.warn('No se pudo actualizar el contador del carrito.', error);
+    const minusButton = section.querySelector('[data-quantity-minus]');
+
+    const plusButton = section.querySelector('[data-quantity-plus]');
+
+    let cartVariantIds = new Set();
+
+    const normalizeQuantity = (value) => {
+      const quantity = Number.parseInt(value, 10);
+
+      if (!Number.isFinite(quantity) || quantity < 1) {
+        return 1;
+      }
+
+      return quantity;
+    };
+
+    const syncQuantity = () => {
+      if (!quantityInput) return;
+
+      const quantity = normalizeQuantity(quantityInput.value);
+      quantityInput.value = quantity;
+
+      stickyQuantityInputs.forEach((input) => {
+        input.value = quantity;
+      });
+    };
+
+    const getVariantId = (form) => {
+      const variantInput = form.querySelector('[name="id"]');
+
+      return variantInput ? String(variantInput.value) : null;
+    };
+
+    const getButton = (form) => {
+      return form.querySelector('[data-add-to-cart]');
+    };
+
+    const setButtonText = (button, text) => {
+      if (!button) return;
+
+      const textElement = button.querySelector('[data-add-to-cart-text]');
+
+      if (textElement) {
+        textElement.textContent = text;
+      } else {
+        button.textContent = text;
       }
     };
+
+    const variantIsInCart = (variantId) => {
+      return variantId && cartVariantIds.has(String(variantId));
+    };
+
+    const updateButtonForForm = (form) => {
+      const button = getButton(form);
+
+      if (!button || button.dataset.loading === 'true') return;
+
+      const variantId = getVariantId(form);
+
+      setButtonText(
+        button,
+        variantIsInCart(variantId) ? 'Añadir más' : button.dataset.defaultText || 'Añadir al carrito'
+      );
+    };
+
+    const updateAllButtons = () => {
+      productForms.forEach(updateButtonForForm);
+    };
+
+    const updateVisibleCartCounters = (cart) => {
+      document
+        .querySelectorAll(['[data-cart-count]', '.cart-count', '.header-cart-count', '.reimii-cart-count'].join(','))
+        .forEach((counter) => {
+          counter.textContent = cart.item_count;
+          counter.hidden = cart.item_count === 0;
+        });
+    };
+
+    const loadCart = async () => {
+      const response = await fetch(`${window.Shopify.routes.root}cart.js`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('No se pudo consultar el carrito.');
+      }
+
+      const cart = await response.json();
+
+      cartVariantIds = new Set(cart.items.map((item) => String(item.variant_id)));
+
+      updateVisibleCartCounters(cart);
+      updateAllButtons();
+
+      document.dispatchEvent(
+        new CustomEvent('reimii:cart-updated', {
+          detail: { cart },
+        })
+      );
+
+      return cart;
+    };
+
+    minusButton?.addEventListener('click', () => {
+      if (!quantityInput) return;
+
+      quantityInput.value = Math.max(1, normalizeQuantity(quantityInput.value) - 1);
+
+      syncQuantity();
+    });
+
+    plusButton?.addEventListener('click', () => {
+      if (!quantityInput) return;
+
+      quantityInput.value = normalizeQuantity(quantityInput.value) + 1;
+
+      syncQuantity();
+    });
+
+    quantityInput?.addEventListener('change', syncQuantity);
+    quantityInput?.addEventListener('input', syncQuantity);
 
     productForms.forEach((form) => {
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const button = form.querySelector('button[type="submit"]');
+        const button = getButton(form);
 
-        if (!button || button.dataset.loading === 'true') return;
+        if (!button || button.dataset.loading === 'true') {
+          return;
+        }
 
-        const initialText = button.dataset.initialText || button.textContent.trim() || 'Añadir al carrito';
+        syncQuantity();
 
-        button.dataset.initialText = initialText;
         button.dataset.loading = 'true';
         button.disabled = true;
         button.setAttribute('aria-busy', 'true');
-        button.textContent = 'Añadiendo…';
+
+        setButtonText(button, 'Añadiendo…');
 
         try {
+          const formData = new FormData(form);
+
           const response = await fetch(`${window.Shopify.routes.root}cart/add.js`, {
             method: 'POST',
             headers: {
               Accept: 'application/json',
             },
-            body: new FormData(form),
+            body: formData,
           });
 
           const result = await response.json();
@@ -322,29 +489,64 @@
             throw new Error(result.description || result.message || 'No se pudo añadir el producto.');
           }
 
-          button.textContent = '✓ Añadido';
+          setButtonText(button, '✓ Añadido');
 
-          await updateCartCount();
+          await loadCart();
 
-          setTimeout(() => {
-            button.textContent = 'Añadir más';
-            button.disabled = false;
+          window.setTimeout(() => {
             button.dataset.loading = 'false';
+            button.disabled = false;
             button.removeAttribute('aria-busy');
-          }, 1200);
+
+            updateButtonForForm(form);
+          }, 1000);
         } catch (error) {
           console.error(error);
 
-          button.textContent = 'Inténtalo de nuevo';
-          button.disabled = false;
+          setButtonText(button, 'Inténtalo de nuevo');
+
           button.dataset.loading = 'false';
+          button.disabled = false;
           button.removeAttribute('aria-busy');
 
-          setTimeout(() => {
-            button.textContent = initialText;
+          window.setTimeout(() => {
+            updateButtonForForm(form);
           }, 2000);
         }
       });
+
+      /*
+       * El selector de variantes del tema modifica el input name="id".
+       * Este observador detecta ese cambio y actualiza el texto del botón.
+       */
+      const variantInput = form.querySelector('[name="id"]');
+
+      if (variantInput) {
+        variantInput.addEventListener('change', () => {
+          updateAllButtons();
+        });
+
+        new MutationObserver(() => {
+          updateAllButtons();
+        }).observe(variantInput, {
+          attributes: true,
+          attributeFilter: ['value'],
+        });
+      }
+    });
+
+    syncQuantity();
+
+    loadCart().catch((error) => {
+      console.warn(error);
+      updateAllButtons();
+    });
+
+    /*
+     * Permite que otros scripts del tema soliciten una actualización.
+     */
+    document.addEventListener('reimii:refresh-cart-buttons', () => {
+      loadCart().catch(console.warn);
     });
   });
 </script>
