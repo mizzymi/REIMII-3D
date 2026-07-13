@@ -1,6 +1,45 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "current": "Default",
+  "current": {
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo": "shopify://shop_images/LogoType_on_dark.svg",
+          "logo_width": 180,
+          "mobile_logo": "shopify://shop_images/LogoType.svg",
+          "mobile_logo_width": 140,
+          "main_menu": "main-menu",
+          "hamburger_icon": "shopify://shop_images/Hamburguer_menu_in_dark.svg",
+          "hamburger_width": 36,
+          "close_icon_width": 28,
+          "dropdown_icon_width": 18,
+          "cart_icon": "shopify://shop_images/Cart_in_dark.svg",
+          "cart_icon_width": 30
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "description": "<p>Pequeños personajes impresos en 3D, llenos de color, movimiento y personalidad.</p>",
+          "show_socials": true,
+          "copyright_text": "Todos los derechos reservados.",
+          "show_policy_links": true,
+          "show_payment_icons": true
+        }
+      }
+    },
+    "content_for_index": []
+  },
   "presets": {
-    "Default": { }
+    "Default": {}
   }
 }
