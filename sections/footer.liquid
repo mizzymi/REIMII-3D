@@ -32,31 +32,48 @@
         {% endif %}
 
         {% if section.settings.show_socials %}
-          <div class="footer-socials">
-            {% if settings.social_instagram_link != blank %}
-              <a
-                href="{{ settings.social_instagram_link }}"
-                class="footer-social-link"
-                target="_blank"
-                rel="noopener"
-                aria-label="Instagram"
-              >
-                {% render 'icons-instagram' %}
-              </a>
-            {% endif %}
+          {% if settings.social_instagram_link != blank
+            or settings.social_facebook_link != blank
+            or settings.social_whatsapp_link != blank
+          %}
+            <div class="footer-socials">
+              {% if settings.social_instagram_link != blank %}
+                <a
+                  href="{{ settings.social_instagram_link }}"
+                  class="footer-social-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                >
+                  {% render 'icons-instagram' %}
+                </a>
+              {% endif %}
 
-            {% if settings.social_facebook_link != blank %}
-              <a
-                href="{{ settings.social_facebook_link }}"
-                class="footer-social-link"
-                target="_blank"
-                rel="noopener"
-                aria-label="Facebook"
-              >
-                {% render 'icons-facebook' %}
-              </a>
-            {% endif %}
-          </div>
+              {% if settings.social_facebook_link != blank %}
+                <a
+                  href="{{ settings.social_facebook_link }}"
+                  class="footer-social-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                >
+                  {% render 'icons-facebook' %}
+                </a>
+              {% endif %}
+
+              {% if settings.social_whatsapp_link != blank %}
+                <a
+                  href="{{ settings.social_whatsapp_link }}"
+                  class="footer-social-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp"
+                >
+                  {% render 'icons-whatsapp' %}
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
         {% endif %}
       </div>
 
