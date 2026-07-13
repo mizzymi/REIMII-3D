@@ -30,7 +30,7 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "title": "Coleccion Destacada",
+        "title": "Colección Destacada",
         "featured_collection": "mas-populares",
         "number_of_products_to_show": 4
       }
