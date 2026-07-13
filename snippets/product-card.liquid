@@ -37,7 +37,7 @@
 
       {% if section.settings.show_new_badge %}
         {% assign now = 'now' | date: '%s' %}
-        {% assign published = product.published_at | date: '%s' %}
+        {% assign published = product.created_at | date: '%s' %}
         {% assign days_since = now | minus: published | divided_by: 86400 %}
 
         {% if days_since <= section.settings.new_product_days %}
