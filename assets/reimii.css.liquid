@@ -1879,7 +1879,6 @@ textarea {
 
 .collection-product-footer {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
@@ -1931,8 +1930,9 @@ textarea {
   position: relative;
 }
 
-.collection-product-sell {
-  display: inline-flex;
+.collection-product-sell,
+.collection-product-sell-footer {
+  display: none;
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
@@ -1969,6 +1969,10 @@ textarea {
 
   .collection-product-media .collection-product-sell {
     position: static;
+  }
+
+  .collection-product-sell-footer {
+    display: inline-flex;
   }
 }
 
@@ -2041,6 +2045,10 @@ textarea {
     right: 0.75rem;
     bottom: 0.75rem;
     z-index: 3;
+  }
+
+  .collection-product-sell-footer{
+    display: none;
   }
 }
 

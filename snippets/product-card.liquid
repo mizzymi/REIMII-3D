@@ -79,6 +79,9 @@
             </span>
           {% endif %}
         </div>
+        {% if product.metafields.custom.vendidos.value > 0 %}
+          <p class="collection-product-sell-footer">{{ product.metafields.custom.vendidos.value }} vendidos</p>
+        {% endif %}
       </div>
     </div>
   </a>
