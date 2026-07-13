@@ -36,11 +36,14 @@
       {% endif %}
 
       {% if section.settings.show_new_badge %}
-        {% assign now = 'now' | date: '%s' %}
-        {% assign published = product.created_at | date: '%s' %}
-        {% assign days_since = now | minus: published | divided_by: 86400 %}
+        {% assign current_timestamp = 'now' | date: '%s' | plus: 0 %}
+        {% assign product_timestamp = product.created_at | date: '%s' | plus: 0 %}
+        {% assign new_product_days = section.settings.new_product_days | plus: 0 %}
 
-        {% if days_since <= section.settings.new_product_days %}
+        {% assign seconds_since_created = current_timestamp | minus: product_timestamp %}
+        {% assign days_since_created = seconds_since_created | divided_by: 86400 %}
+
+        {% if product.created_at != blank and days_since_created >= 0 and days_since_created <= new_product_days %}
           <span class="collection-product-badge collection-product-badge-new"> Nuevo </span>
         {% endif %}
       {% endif %}
