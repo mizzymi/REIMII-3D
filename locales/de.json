@@ -471,5 +471,120 @@
         "many": "Suche: %{count} Ergebnisse gefunden für \"%{terms}\""
       }
     }
+  },
+  "customer_accounts": {
+    "orders": {
+      "order_list": {
+        "items": {
+          "many": "{{count}} Artikel"
+        }
+      },
+      "order_status": {
+        "delivered_description_gift_card": {
+          "many": "Die Geschenkkarten wurden per E-Mail versendet."
+        },
+        "gift_card_label": {
+          "many": "Geschenkkarten"
+        },
+        "confirmed_gift_card_additional_description": {
+          "many": "Jede Geschenkkarte wird in einer separaten E-Mail versendet."
+        },
+        "delivered_description_gift_card_text": {
+          "many": "Die Geschenkkarten wurden per SMS versendet."
+        },
+        "confirmed_gift_card_additional_description_text": {
+          "many": "Jede Geschenkkarte wird in einer separaten Textnachricht versendet."
+        },
+        "gift_resend_success": {
+          "many": "Weitergeleitete Geschenkkarten"
+        },
+        "gift_resend_failure": {
+          "many": "Es gab ein Problem beim Weiterleiten deiner Geschenkkarten. Bitte versuche es erneut oder kontaktiere uns."
+        },
+        "tracking_number": {
+          "many": "Sendungsverfolgungsnummern"
+        },
+        "gift_card_resend_button": {
+          "many": "Geschenkkarten erneut senden"
+        }
+      }
+    },
+    "order_details": {
+      "image_gallery": {
+        "load_more_items": {
+          "many": "Mehr {{count}} Artikel anzeigen"
+        }
+      },
+      "subtotal_label_with_quantity": {
+        "many": "Zwischensumme · {{count}} Artikel"
+      },
+      "discount_order_stacking": {
+        "many": "Bestellrabatte"
+      }
+    },
+    "B2B": {
+      "orders": {
+        "draft_order_list": {
+          "pending_tab_accessibility_label": {
+            "pending_orders": {
+              "many": "Sie haben {{count}} ausstehende Bestellungen."
+            }
+          }
+        }
+      },
+      "draft_order_details": {
+        "payment_status": {
+          "pending": {
+            "banner_overdue": {
+              "many": "Die Zahlung ist vor {{count}} Tagen fällig geworden."
+            },
+            "banner_due": {
+              "many": "Die Zahlung ist in {{count}} Tagen fällig."
+            },
+            "banner_overdue_for_single_fulfillment": {
+              "many": "Die Zahlung von {{amount}} ist vor {{count}} Tagen fällig geworden. {{link}}"
+            }
+          }
+        }
+      }
+    },
+    "errors": {
+      "banner_title": {
+        "many": "Es gibt {{count}} Fehler."
+      }
+    },
+    "payment_methods": {
+      "add_payment_method": {
+        "subscription_contracts": {
+          "more_items": {
+            "many": "{{count}} weitere Produkte"
+          },
+          "product_count": {
+            "many": "{{count}} Produkte"
+          }
+        },
+        "updating_contracts": {
+          "many": "Aktualisiere {{count}} Abonnementverträge..."
+        },
+        "contracts_updated": {
+          "many": "{{count}} Abonnementverträge wurden erfolgreich aktualisiert"
+        }
+      }
+    },
+    "ui_components": {
+      "autocompleteOptionsAvailable": {
+        "many": "{{count}} Artikel verfügbar"
+      },
+      "mapClusterTitle": {
+        "many": "Gruppe von {{number}} Markern"
+      }
+    },
+    "date": {
+      "humanize": {
+        "lessThanOneHourAgo": {
+          "many": "Vor {{count}} Minuten"
+        }
+      }
+    }
   }
 }
