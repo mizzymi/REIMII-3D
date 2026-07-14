@@ -477,5 +477,120 @@
         "many": "Search: %{count} results found for \"%{terms}\""
       }
     }
+  },
+  "customer_accounts": {
+    "orders": {
+      "order_list": {
+        "items": {
+          "many": "{{count}} items"
+        }
+      },
+      "order_status": {
+        "delivered_description_gift_card": {
+          "many": "The gift cards were sent by email."
+        },
+        "gift_card_label": {
+          "many": "Gift cards"
+        },
+        "confirmed_gift_card_additional_description": {
+          "many": "Each gift card will be sent in a separate email."
+        },
+        "delivered_description_gift_card_text": {
+          "many": "The gift cards were sent by text message."
+        },
+        "confirmed_gift_card_additional_description_text": {
+          "many": "Each gift card will be sent in a separate text message."
+        },
+        "gift_resend_success": {
+          "many": "Forwarded gift cards"
+        },
+        "gift_resend_failure": {
+          "many": "There was a problem resending your gift cards. Please try again or contact us."
+        },
+        "tracking_number": {
+          "many": "Tracking numbers"
+        },
+        "gift_card_resend_button": {
+          "many": "Resend gift cards"
+        }
+      }
+    },
+    "order_details": {
+      "image_gallery": {
+        "load_more_items": {
+          "many": "Show {{count}} more items"
+        }
+      },
+      "subtotal_label_with_quantity": {
+        "many": "Subtotal · {{count}} items"
+      },
+      "discount_order_stacking": {
+        "many": "Order discounts"
+      }
+    },
+    "B2B": {
+      "orders": {
+        "draft_order_list": {
+          "pending_tab_accessibility_label": {
+            "pending_orders": {
+              "many": "You have {{count}} pending orders"
+            }
+          }
+        }
+      },
+      "draft_order_details": {
+        "payment_status": {
+          "pending": {
+            "banner_overdue": {
+              "many": "The payment expired {{count}} days ago."
+            },
+            "banner_due": {
+              "many": "The payment is due in {{count}} days."
+            },
+            "banner_overdue_for_single_fulfillment": {
+              "many": "The payment of {{amount}} was due {{count}} days ago. {{link}}"
+            }
+          }
+        }
+      }
+    },
+    "errors": {
+      "banner_title": {
+        "many": "There are {{count}} errors."
+      }
+    },
+    "payment_methods": {
+      "add_payment_method": {
+        "subscription_contracts": {
+          "more_items": {
+            "many": "{{count}} more products"
+          },
+          "product_count": {
+            "many": "{{count}} products"
+          }
+        },
+        "updating_contracts": {
+          "many": "Updating {{count}} subscription contracts..."
+        },
+        "contracts_updated": {
+          "many": "{{count}} subscription contracts were successfully updated"
+        }
+      }
+    },
+    "ui_components": {
+      "autocompleteOptionsAvailable": {
+        "many": "{{count}} items available"
+      },
+      "mapClusterTitle": {
+        "many": "Group of {{number}} markers"
+      }
+    },
+    "date": {
+      "humanize": {
+        "lessThanOneHourAgo": {
+          "many": "{{count}} minutes ago"
+        }
+      }
+    }
   }
 }
