@@ -472,6 +472,12 @@
       }
     }
   },
+  "general": {
+    "404": {
+      "title": "Seite nicht gefunden",
+      "subtext_html": "Die angeforderte Seite konnte nicht gefunden werden."
+    }
+  },
   "customer_accounts": {
     "orders": {
       "order_list": {

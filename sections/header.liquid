@@ -4,33 +4,21 @@
   <div class="mx-auto p-4 sm:px-6">
     <div class="flex justify-between md:hidden">
       <div class="flex justify-start min-w-0">
-        <a href="{{ routes.root_url }}" class="inline-flex items-center">
-          {% if section.settings.logo != blank %}
-            {{
-              section.settings.logo
-              | image_url: width: section.settings.logo_width
-              | image_tag: alt: shop.name, width: section.settings.logo_width, class: 'logo h-auto'
-            }}
-          {% else %}
-            <span class="text-reimii-white text-xl font-reimii-display">
+        <h1>
+          <a href="{{ routes.root_url }}" class="inline-flex items-center">
+            {% if section.settings.logo != blank %}
               {{
-                shop.name
-                | replace: 'á', 'a'
-                | replace: 'é', 'e'
-                | replace: 'í', 'i'
-                | replace: 'ó', 'o'
-                | replace: 'ú', 'u'
-                | replace: 'Á', 'A'
-                | replace: 'É', 'E'
-                | replace: 'Í', 'I'
-                | replace: 'Ó', 'O'
-                | replace: 'Ú', 'U'
-                | replace: 'ñ', 'n'
-                | replace: 'Ñ', 'N'
+                section.settings.logo
+                | image_url: width: section.settings.logo_width
+                | image_tag: alt: shop.name, width: section.settings.logo_width, class: 'logo h-auto'
               }}
-            </span>
-          {% endif %}
-        </a>
+            {% else %}
+              <span class="text-reimii-white text-xl font-reimii-display">
+                {{ shop.name }}
+              </span>
+            {% endif %}
+          </a>
+        </h1>
       </div>
 
       <!-- MOBILE MENU BUTTON -->

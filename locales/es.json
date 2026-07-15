@@ -7,4 +7,11 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{}
+{
+	"general": {
+		"404": {
+			"title": "Página no encontrada",
+			"subtext_html": "Lo sentimos, no encontramos la página que buscas. Regresa a la <a href=\"/\">página principal</a>."
+		}
+	}
+}
