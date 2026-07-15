@@ -13,7 +13,7 @@
     "social_sharing_image": "shopify://shop_images/reimii_logo.svg",
     "social_instagram_link": "https://www.instagram.com/reimii.3d/",
     "social_facebook_link": "https://www.facebook.com/profile.php?id=61591414655105",
-    "social_whatsapp_link": "https://wa.me/34676001063",
+    "social_whatsapp_link": "https://api.whatsapp.com/send/?phone=34676001063&text&type=phone_number&app_absent=0",
     "sections": {
       "header": {
         "type": "header",
