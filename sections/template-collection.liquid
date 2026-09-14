@@ -42,7 +42,7 @@
     {% if collection.products_count > 0 %}
       <div class="collection-grid">
         {% for product in collection.products %}
-          {% render 'product-card' | product: product %}
+          {% render 'product-card', product: product %}
         {% endfor %}
       </div>
 
@@ -141,3 +141,13 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'product-card' | product: product %}"
+  to: "{% render 'product-card', product: product %}"
+  position: 1375..1420
+{% endcomment %}
